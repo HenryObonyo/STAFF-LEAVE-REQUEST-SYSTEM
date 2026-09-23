@@ -1,0 +1,91 @@
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, var(--ink) 0%, #14201A 100%);
+  padding: 24px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--surface-raised);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 40px 36px;
+}
+
+.login-eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin: 0 0 10px;
+  letter-spacing: 0.02em;
+}
+
+.login-card h1 {
+  font-size: 26px;
+  margin: 0 0 8px;
+}
+
+.login-lede {
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  margin: 0 0 28px;
+}
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+
+.field input {
+  width: 100%;
+  padding: 11px 13px;
+  font-size: 15px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  background: var(--surface-raised);
+}
+
+.field input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(63, 120, 89, 0.15);
+}
+
+.login-error {
+  color: var(--rejected);
+  font-size: 13.5px;
+  margin: 0 0 16px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
