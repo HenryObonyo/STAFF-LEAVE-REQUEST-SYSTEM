@@ -1,54 +1,59 @@
-# Staff Leave Request System - Frontend
+# Staff Leave Request System — Frontend
 
-This folder contains the frontend application for the Staff Leave Request System.
+React + Vite frontend for the Staff Leave Request System, built for the simulated client **AFRICA CONSULTIQ**.
 
-## Project Overview
+ Structure
 
-The Staff Leave Request System is a full-stack web application developed for AFRICA CONSULTIQ to automate and manage staff leave requests.
+```text
+src/
+├── api/client.js            # Every backend call lives here. Matches the endpoint
+│                              contract agreed with the backend team — see below.
+├── context/AuthContext.jsx   # Login state, current user, logout
+├── components/
+│   ├── ProtectedRoute.jsx    # Blocks a page unless logged in + correct role
+│   ├── DashboardLayout.jsx   # Shared sidebar + header for all three dashboards
+│   └── StatusBadge.jsx       # Pending / Approved / Rejected pill
+├── pages/
+│   ├── LoginPage.jsx
+│   ├── EmployeeDashboard.jsx    # Submit + view own requests
+│   ├── ManagerDashboard.jsx     # Approve/reject team's pending requests
+│   └── HrAdminDashboard.jsx     # Company-wide view + summary stats
+├── styles/                   # Plain CSS, no framework — tokens.css holds the palette
+└── App.jsx                   # Routes + role-based redirects
+```
 
-The frontend provides the user interface through which staff and administrators interact with the system.
+ Running it
 
-## Frontend Responsibilities
+```bash
+npm install
+npm run dev
+```
 
-The frontend will provide:
+Opens at `http://localhost:5173`.
 
-- User login and authentication interface
-- Staff dashboard
-- Leave request submission
-- Leave request tracking
-- Leave approval and rejection interfaces
-- Leave history
-- Notifications and messages
-- Administrative dashboard
-- Workforce and leave analytics
-- Responsive user interface
+ Connecting to the backend
 
-## Technology
+1. Copy `.env.example` to `.env` and set `VITE_API_URL` to wherever the backend runs
+   (currently `http://localhost:5000/api`).
+2. `src/api/client.js` is the single source of truth for every API call the frontend
+   makes. If a backend route's path, method, or response shape changes, update it here.
+3. Expected login response shape:
 
-The frontend will be developed using:
+   ```json
+   { "token": "...", "user": { "id": 1, "name": "...", "email": "...", "role": "employee" } }
+   ```
 
-- React
-- Vite
-- JavaScript
-- HTML
-- CSS
-- REST API integration
+   `role` must be exactly `"employee"`, `"manager"`, or `"hr_admin"`.
 
-## Backend Integration
+ What's already handled
 
-The frontend communicates with the backend through REST APIs.
+- Role-based routing (an employee can't reach `/manager` or `/hr`, even by typing the URL)
+- Login, logout, session persistence
+- All three dashboards wired to call the API and render real data
+- Rejecting a request requires a reason before it submits (matches BR-10)
 
-The backend is responsible for:
+ What's still to build
 
-- Authentication and authorization
-- Role-Based Access Control (RBAC)
-- Leave request processing
-- Business logic
-- PostgreSQL database operations
-- API services
-
-## Development
-
-Frontend development is maintained separately from the backend while both components are stored in the same GitHub repository.
-
-The frontend team should place all frontend application files inside this directory.
+- Registration page (FR-01 — self-registration is in scope per the functional requirements)
+- Public landing page ahead of the login screen
+- Final color/branding pass
