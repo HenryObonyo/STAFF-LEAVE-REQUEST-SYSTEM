@@ -136,7 +136,6 @@
   color: var(--ink-soft);
 }
 
-/* Panels & tables shared across dashboards */
 .panel {
   background: var(--surface-raised);
   border: 1px solid var(--line);
@@ -191,7 +190,7 @@
 
 .status-badge.approved {
   background: var(--approved-bg);
-  color: var(--primary-dark);
+  color: var(--approved);
 }
 
 .status-badge.rejected {
@@ -246,7 +245,6 @@
   color: var(--rejected);
 }
 
-/* Employee request form */
 .leave-form__row {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -282,7 +280,6 @@
   padding: 11px 22px;
 }
 
-/* HR summary cards */
 .summary-cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
