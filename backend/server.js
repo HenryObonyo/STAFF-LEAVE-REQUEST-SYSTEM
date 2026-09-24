@@ -8,6 +8,8 @@ const cors = require('cors');
 const pool = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const leaveRoutes = require('./routes/leaveRoutes');
+const managerRoutes = require('./routes/managerRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 
@@ -22,6 +24,8 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/leave-requests', leaveRoutes);
+app.use('/api/manager', managerRoutes);
+app.use('/api/admin', adminRoutes);
 
 const PORT = process.env.PORT || 5000;
 

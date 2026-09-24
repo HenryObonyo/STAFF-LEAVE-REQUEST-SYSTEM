@@ -1,4 +1,5 @@
 const pool = require('../config/db');
+const logAudit = require('../utils/auditLogger');
 
 
 // Submit a new leave request
@@ -65,6 +66,15 @@ const submitLeaveRequest = async (req, res) => {
         reason
       ]
     );
+
+    await logAudit({
+      user_id: employee_id,
+      action: 'SUBMIT',
+      entity: 'leave_request',
+      entity_id: result.rows[0].leave_request_id,
+      description: 'Employee submitted a leave request'
+    });
+
 
     res.status(201).json({
       message: 'Leave request submitted successfully',
@@ -255,6 +265,19 @@ const updateLeaveRequest = async (req, res) => {
         employee_id
       ]
     );
+
+
+    await logAudit({
+      user_id: employee_id,
+      action: 'UPDATE',
+      entity: 'leave_request',
+      entity_id: result.rows[0].leave_request_id,
+      description: 'Employee updated a pending leave request'
+    });
+
+
+
+
 
     res.status(200).json({
       message: 'Leave request updated successfully',
