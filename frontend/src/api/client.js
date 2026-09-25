@@ -1,8 +1,5 @@
-// Central place for every call to the backend.
-// Henry's real Express routes should match these paths and payloads —
-// if his implementation differs, this is the one file to update.
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 function getToken() {
   return localStorage.getItem("token");
@@ -31,7 +28,6 @@ async function request(path, { method = "GET", body, auth = true } = {}) {
   return data;
 }
 
-// --- Auth ---
 export function login(email, password) {
   return request("/auth/login", {
     method: "POST",
@@ -40,9 +36,7 @@ export function login(email, password) {
   });
 }
 
-// --- Employee ---
 export function createLeaveRequest(payload) {
-  // payload: { leave_type_id, start_date, end_date, reason }
   return request("/leave-requests", { method: "POST", body: payload });
 }
 
@@ -54,9 +48,12 @@ export function updateLeaveRequest(id, payload) {
   return request(`/leave-requests/${id}`, { method: "PATCH", body: payload });
 }
 
-// --- Manager ---
 export function getPendingLeaveRequests() {
   return request("/leave-requests/pending");
+}
+
+export function getTeamLeaveRequests() {
+  return request("/leave-requests/team");
 }
 
 export function approveLeaveRequest(id) {
@@ -70,7 +67,6 @@ export function rejectLeaveRequest(id, reason) {
   });
 }
 
-// --- HR / Admin ---
 export function getAllEmployees() {
   return request("/employees");
 }
@@ -79,7 +75,6 @@ export function getAllLeaveRequests() {
   return request("/leave-requests");
 }
 
-// --- Reference data ---
 export function getLeaveTypes() {
   return request("/leave-types", { auth: false });
 }

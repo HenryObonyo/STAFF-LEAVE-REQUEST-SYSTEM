@@ -1,11 +1,23 @@
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import "../styles/dashboard.css";
 
 const NAV_BY_ROLE = {
-  employee: [{ label: "My Requests", path: "/employee" }],
-  manager: [{ label: "Team Requests", path: "/manager" }],
-  hr_admin: [{ label: "Overview", path: "/hr" }],
+  employee: [
+    { label: "My Requests", path: "/employee", end: true },
+    { label: "Leave Usage", path: "/employee/usage" },
+    { label: "Profile", path: "/employee/profile" },
+  ],
+  manager: [
+    { label: "Team Requests", path: "/manager", end: true },
+    { label: "History", path: "/manager/history" },
+    { label: "Team Calendar", path: "/manager/calendar" },
+  ],
+  hr_admin: [
+    { label: "Overview", path: "/hr", end: true },
+    { label: "Employees", path: "/hr/employees" },
+    { label: "Leave Types", path: "/hr/leave-types" },
+  ],
 };
 
 export default function DashboardLayout({ title, children }) {
@@ -33,9 +45,16 @@ export default function DashboardLayout({ title, children }) {
 
         <nav className="sidebar__nav">
           {navItems.map((item) => (
-            <a key={item.path} href={item.path} className="nav-link is-active">
+            <NavLink
+              key={item.path}
+              to={item.path}
+              end={item.end}
+              className={({ isActive }) =>
+                "nav-link" + (isActive ? " is-active" : "")
+              }
+            >
               {item.label}
-            </a>
+            </NavLink>
           ))}
         </nav>
 

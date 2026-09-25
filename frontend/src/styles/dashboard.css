@@ -318,3 +318,93 @@
   .leave-form__row { grid-template-columns: 1fr; }
   .summary-cards { grid-template-columns: repeat(2, 1fr); }
 }
+
+.kv-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.kv-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.kv-list li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.kv-label {
+  color: var(--ink-soft);
+}
+
+.kv-value {
+  font-weight: 600;
+}
+
+.calendar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-list li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.calendar-list li:last-child {
+  border-bottom: none;
+}
+
+.calendar-list__name {
+  font-weight: 600;
+}
+
+.calendar-list__dates {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.calendar-list__type {
+  font-size: 12.5px;
+  color: var(--approved);
+  background: var(--approved-bg);
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.type-pill-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.type-pill {
+  font-size: 13.5px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
