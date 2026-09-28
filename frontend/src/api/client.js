@@ -86,6 +86,11 @@ export async function getPendingLeaveRequests() {
   return data.leaveRequests;
 }
 
+export async function getTeamLeaveRequests() {
+  const data = await request("/manager/employee-history");
+  return data.leaveRequests;
+}
+
 export function approveLeaveRequest(id) {
   return request(`/manager/requests/${id}/approve`, {
     method: "PUT",

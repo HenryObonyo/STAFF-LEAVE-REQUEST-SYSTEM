@@ -17,7 +17,7 @@ export default function TeamCalendarPage() {
         const all = await getTeamLeaveRequests();
         const today = new Date();
         const approved = all
-          .filter((r) => r.status === "approved" && new Date(r.end_date) >= today)
+          .filter((r) => r.status === "Approved" && new Date(r.end_date) >= today)
           .sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
         setUpcoming(approved);
         setStatus("ready");
@@ -39,19 +39,57 @@ export default function TeamCalendarPage() {
           <p className="empty-state">No upcoming approved leave for your team.</p>
         )}
         {status === "ready" && upcoming.length > 0 && (
-          <ul className="calendar-list">
-            {upcoming.map((r) => (
-              <li key={r.id}>
-                <span className="calendar-list__name">{r.employee_name}</span>
-                <span className="calendar-list__dates">
-                  {r.start_date} → {r.end_date}
-                </span>
-                <span className="calendar-list__type">
-                  {r.leave_type_name || r.leave_type_id}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <table className="req-table">
+            <thead>
+              <tr>
+                <th>Employee</th>
+                <th>Leave Type</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {upcoming.map((r) => {
+                const start = new Date(r.start_date);
+                const end = new Date(r.end_date);
+
+                const duration =
+                  Math.ceil(
+                    (end - start) / (1000 * 60 * 60 * 24)
+                  ) + 1;
+
+                return (
+                  <tr key={r.leave_request_id}>
+                    <td>{r.employee_name}</td>
+
+                    <td>{r.leave_type}</td>
+
+                    <td>
+                      {start.toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </td>
+
+                    <td>
+                      {end.toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </td>
+
+                    <td>
+                      {duration} {duration === 1 ? "day" : "days"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         )}
       </section>
     </DashboardLayout>

@@ -3,23 +3,24 @@ import { useNavigate, NavLink } from "react-router-dom";
 import "../styles/dashboard.css";
 
 const NAV_BY_ROLE = {
-  employee: [
+  Employee: [
     { label: "My Requests", path: "/employee", end: true },
     { label: "Leave Usage", path: "/employee/usage" },
     { label: "Profile", path: "/employee/profile" },
   ],
-  manager: [
+
+  Manager: [
     { label: "Team Requests", path: "/manager", end: true },
     { label: "History", path: "/manager/history" },
     { label: "Team Calendar", path: "/manager/calendar" },
   ],
-  hr_admin: [
+
+  "HR/Admin": [
     { label: "Overview", path: "/hr", end: true },
     { label: "Employees", path: "/hr/employees" },
     { label: "Leave Types", path: "/hr/leave-types" },
   ],
 };
-
 export default function DashboardLayout({ title, children }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -67,7 +68,7 @@ export default function DashboardLayout({ title, children }) {
         <header className="dash-header">
           <div>
             <p className="dash-header__eyebrow">
-              {user?.role === "hr_admin" ? "HR / Admin" : user?.role}
+              {user?.role === "HR/Admin" ? "HR / Admin" : user?.role}
             </p>
             <h1>{title}</h1>
           </div>

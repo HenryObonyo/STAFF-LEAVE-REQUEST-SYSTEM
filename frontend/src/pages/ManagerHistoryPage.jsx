@@ -13,10 +13,9 @@ export default function ManagerHistoryPage() {
       setStatus("loading");
       try {
         const all = await getTeamLeaveRequests();
-        const decided = all
-          .filter((r) => r.status !== "pending")
-          .sort((a, b) => new Date(b.decided_at) - new Date(a.decided_at));
-        setRequests(decided);
+        const sorted = [...all]
+          .sort((a, b) => new Date(b.submitted_at) - new Date(a.submitted_at));
+        setRequests(sorted);
         setStatus("ready");
       } catch (err) {
         setErrorMsg(err.message);
@@ -42,18 +41,40 @@ export default function ManagerHistoryPage() {
                 <th>Employee</th>
                 <th>Type</th>
                 <th>Dates</th>
+                <th>Reason</th>
+                <th>Decision</th>
                 <th>Status</th>
-                <th>Decided</th>
               </tr>
             </thead>
             <tbody>
               {requests.map((r) => (
                 <tr key={r.id}>
                   <td>{r.employee_name}</td>
-                  <td>{r.leave_type_name || r.leave_type_id}</td>
-                  <td>{r.start_date} → {r.end_date}</td>
-                  <td><StatusBadge status={r.status} /></td>
-                  <td>{r.decided_at ? new Date(r.decided_at).toLocaleDateString() : "—"}</td>
+
+                  <td>{r.leave_type}</td>
+
+                  <td>
+                    {r.start_date?.split("T")[0]} →{" "}
+                    {r.end_date?.split("T")[0]}
+                  </td>
+
+                  <td>{r.reason}</td>
+
+                  <td>
+                    {r.status === "Rejected" ? (
+                      <span>
+                        {r.decision_reason || "No rejection reason provided"}
+                      </span>
+                    ) : r.status === "Approved" ? (
+                      <span>Approved by manager</span>
+                    ) : (
+                      <span>Awaiting manager review</span>
+                    )}
+                  </td>
+
+                  <td>
+                    <StatusBadge status={r.status} />
+                  </td>
                 </tr>
               ))}
             </tbody>
