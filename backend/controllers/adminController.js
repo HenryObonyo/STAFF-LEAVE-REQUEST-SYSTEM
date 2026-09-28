@@ -34,6 +34,37 @@ const getAllEmployees = async (req, res) => {
   }
 };
 
+
+const getAllDepartments = async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT
+    department_id,
+    name
+   FROM departments
+   ORDER BY name ASC`
+    );
+
+    res.status(200).json({
+      message: "Departments retrieved successfully",
+      departments: result.rows
+    });
+  } catch (error) {
+    console.error("Get departments error:", error);
+
+    res.status(500).json({
+      message: "Server error while retrieving departments"
+    });
+  }
+};
+
+
+
+
+
+
+
+
 const getAllLeaveRequests = async (req, res) => {
   try {
     const result = await pool.query(
@@ -366,10 +397,103 @@ const getDashboardStats = async (req, res) => {
   }
 };
 
+
+
+const getAuditLogs = async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT
+        al.audit_log_id,
+        al.user_id,
+        u.name AS user_name,
+        u.email AS user_email,
+        u.role AS user_role,
+        al.action,
+        al.entity,
+        al.entity_id,
+        al.description,
+        al.created_at
+       FROM audit_logs al
+       LEFT JOIN users u
+         ON al.user_id = u.user_id
+       ORDER BY al.created_at DESC`
+    );
+
+    res.status(200).json({
+      message: "Audit logs retrieved successfully",
+      auditLogs: result.rows
+    });
+
+  } catch (error) {
+    console.error("Get audit logs error:", error);
+
+    res.status(500).json({
+      message: "Server error while retrieving audit logs"
+    });
+  }
+};
+
+
+
+const updateEmployeeStatus = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const { is_active } = req.body;
+
+    if (typeof is_active !== "boolean") {
+      return res.status(400).json({
+        message: "is_active must be true or false",
+      });
+    }
+
+    const result = await pool.query(
+      `UPDATE users
+       SET is_active = $1
+       WHERE user_id = $2
+       RETURNING
+         user_id,
+         name,
+         email,
+         role,
+         department_id,
+         is_active`,
+      [is_active, user_id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        message: "Employee not found",
+      });
+    }
+
+    res.status(200).json({
+      message: is_active
+        ? "Employee account enabled successfully"
+        : "Employee account disabled successfully",
+      user: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Update employee status error:", error);
+
+    res.status(500).json({
+      message: "Server error while updating employee account status",
+    });
+  }
+};
+
+
+
+
+
+
 module.exports = {
   getAllEmployees,
+  getAllDepartments,
   getAllLeaveRequests,
   approveManagerLeaveRequest,
   rejectManagerLeaveRequest,
   getDashboardStats,
+  getAuditLogs,
+  updateEmployeeStatus
+
 };

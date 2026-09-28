@@ -6,6 +6,7 @@ const express = require('express');
 const cors = require('cors');
 
 const pool = require('./config/db');
+const leaveTypeRoutes = require('./routes/leaveTypeRoutes');
 const authRoutes = require('./routes/authRoutes');
 const leaveRoutes = require('./routes/leaveRoutes');
 const managerRoutes = require('./routes/managerRoutes');
@@ -26,7 +27,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/leave-requests', leaveRoutes);
 app.use('/api/manager', managerRoutes);
 app.use('/api/admin', adminRoutes);
-
+app.use('/api/leave-types', leaveTypeRoutes);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, async () => {

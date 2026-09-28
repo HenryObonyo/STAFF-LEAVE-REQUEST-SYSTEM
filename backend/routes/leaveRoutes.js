@@ -4,7 +4,8 @@ const {
   submitLeaveRequest,
   getMyLeaveRequests,
   getMyLeaveRequestById,
-  updateLeaveRequest
+  updateLeaveRequest,
+  deleteLeaveRequest
 } = require('../controllers/leaveController');
 
 const {
@@ -50,5 +51,13 @@ router.put(
   updateLeaveRequest
 );
 
+
+// Employee deletes own leave request
+router.delete(
+  '/:id',
+  authenticateToken,
+  authorizeRoles('Employee', 'Manager'),
+  deleteLeaveRequest
+);
 
 module.exports = router;

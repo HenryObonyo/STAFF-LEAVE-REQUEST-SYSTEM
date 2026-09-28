@@ -2,12 +2,20 @@ const express = require('express');
 
 const {
   getAllEmployees,
+  getAllDepartments,
   getAllLeaveRequests,
   approveManagerLeaveRequest,
   rejectManagerLeaveRequest,
-  getDashboardStats
-
+  getDashboardStats,
+  getAuditLogs,
+  updateEmployeeStatus
 } = require('../controllers/adminController');
+
+
+const {
+  createEmployee
+} = require('../controllers/authController');
+
 
 const {
   authenticateToken,
@@ -50,6 +58,35 @@ router.put(
   authenticateToken,
   authorizeRoles('HR/Admin'),
   rejectManagerLeaveRequest
+);
+
+router.get(
+  "/audit-logs",
+  authenticateToken,
+  authorizeRoles("HR/Admin"),
+  getAuditLogs
+);
+
+
+router.post(
+  '/employees',
+  authenticateToken,
+  authorizeRoles('HR/Admin'),
+  createEmployee
+);
+
+router.put(
+  '/employees/:user_id/status',
+  authenticateToken,
+  authorizeRoles('HR/Admin'),
+  updateEmployeeStatus
+);
+
+router.get(
+  '/departments',
+  authenticateToken,
+  authorizeRoles('HR/Admin'),
+  getAllDepartments
 );
 
 

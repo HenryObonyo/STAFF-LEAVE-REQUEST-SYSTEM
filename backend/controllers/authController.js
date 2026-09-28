@@ -74,6 +74,89 @@ const register = async (req, res) => {
 };
 
 
+const createEmployee = async (req, res) => {
+  try {
+    const {
+      name,
+      email,
+      role,
+      department_id
+    } = req.body;
+
+    // Validate required fields
+    if (!name || !email || !role || !department_id) {
+      return res.status(400).json({
+        message: 'Name, email, role and department are required'
+      });
+    }
+
+    // Only Employee or Manager can be created through this function
+    if (!['Employee', 'Manager'].includes(role)) {
+      return res.status(400).json({
+        message: 'Role must be Employee or Manager'
+      });
+    }
+
+    // Check whether email already exists
+    const existingUser = await pool.query(
+      'SELECT user_id FROM users WHERE email = $1',
+      [email]
+    );
+
+    if (existingUser.rows.length > 0) {
+      return res.status(409).json({
+        message: 'An account with this email already exists'
+      });
+    }
+
+    // Default password
+    const defaultPassword = 'Welcome@123';
+
+    const passwordHash = await bcrypt.hash(defaultPassword, 10);
+
+    const result = await pool.query(
+      `INSERT INTO users
+        (name, email, password_hash, role, department_id)
+       VALUES
+        ($1, $2, $3, $4, $5)
+       RETURNING
+        user_id,
+        name,
+        email,
+        role,
+        department_id,
+        is_active`,
+      [
+        name,
+        email,
+        passwordHash,
+        role,
+        department_id
+      ]
+    );
+
+    const user = result.rows[0];
+
+    res.status(201).json({
+      message: 'Employee account created successfully',
+      user,
+      defaultPassword
+    });
+
+  } catch (error) {
+    console.error('Create employee error:', error);
+
+    res.status(500).json({
+      message: 'Server error while creating employee account'
+    });
+  }
+};
+
+
+
+
+
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -155,5 +238,6 @@ const login = async (req, res) => {
 
 module.exports = {
   register,
+  createEmployee,
   login
 };

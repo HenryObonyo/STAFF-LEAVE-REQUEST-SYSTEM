@@ -28,6 +28,7 @@ const getPendingTeamRequests = async (req, res) => {
          ON lr.leave_type_id = lt.leave_type_id
        WHERE u.manager_id = $1
        AND lr.status = 'Pending'
+       AND u.role = 'Employee'
        ORDER BY lr.submitted_at ASC`,
       [manager_id]
     );
@@ -103,18 +104,19 @@ const getTeamLeaveRequestById = async (req, res) => {
 
 
 
-
 const approveLeaveRequest = async (req, res) => {
   try {
     const manager_id = req.user.user_id;
     const { id } = req.params;
 
-    const existingRequest = await pool.query(
+    // Get the leave request and the employee's role/manager
+    const requestResult = await pool.query(
       `SELECT
         lr.leave_request_id,
         lr.employee_id,
         lr.status,
-        u.manager_id
+        u.manager_id,
+        u.role AS employee_role
        FROM leave_requests lr
        JOIN users u
          ON lr.employee_id = u.user_id
@@ -122,32 +124,43 @@ const approveLeaveRequest = async (req, res) => {
       [id]
     );
 
-    if (existingRequest.rows.length === 0) {
+    if (requestResult.rows.length === 0) {
       return res.status(404).json({
         message: 'Leave request not found'
       });
     }
 
-    const request = existingRequest.rows[0];
+    const request = requestResult.rows[0];
 
+    // Managers can only approve Employee leave requests
+    if (request.employee_role !== 'Employee') {
+      return res.status(403).json({
+        message: 'Managers can only approve employee leave requests'
+      });
+    }
+
+    // A manager cannot approve their own leave request
     if (request.employee_id === manager_id) {
       return res.status(403).json({
         message: 'You cannot approve your own leave request'
       });
     }
 
+    // The employee must report to this manager
     if (request.manager_id !== manager_id) {
       return res.status(403).json({
-        message: 'You do not have permission to approve this leave request'
+        message: 'You are not authorized to approve this leave request'
       });
     }
 
+    // Only pending requests can be approved
     if (request.status !== 'Pending') {
       return res.status(400).json({
         message: 'Only pending leave requests can be approved'
       });
     }
 
+    // Approve the request
     const result = await pool.query(
       `UPDATE leave_requests
        SET
@@ -165,12 +178,9 @@ const approveLeaveRequest = async (req, res) => {
       user_id: manager_id,
       action: 'APPROVE',
       entity: 'leave_request',
-      entity_id: result.rows[0].leave_request_id,
-      description: 'Manager approved a leave request'
+      entity_id: id,
+      description: 'Manager approved an employee leave request'
     });
-
-
-
 
     res.status(200).json({
       message: 'Leave request approved successfully',
@@ -187,25 +197,27 @@ const approveLeaveRequest = async (req, res) => {
 };
 
 
-
 const rejectLeaveRequest = async (req, res) => {
   try {
     const manager_id = req.user.user_id;
     const { id } = req.params;
     const { decision_reason } = req.body;
 
+    // Rejection reason is required
     if (!decision_reason || !decision_reason.trim()) {
       return res.status(400).json({
-        message: 'A rejection reason is required'
+        message: 'Rejection reason is required'
       });
     }
 
-    const existingRequest = await pool.query(
+    // Get the leave request and the employee's role/manager
+    const requestResult = await pool.query(
       `SELECT
         lr.leave_request_id,
         lr.employee_id,
         lr.status,
-        u.manager_id
+        u.manager_id,
+        u.role AS employee_role
        FROM leave_requests lr
        JOIN users u
          ON lr.employee_id = u.user_id
@@ -213,32 +225,43 @@ const rejectLeaveRequest = async (req, res) => {
       [id]
     );
 
-    if (existingRequest.rows.length === 0) {
+    if (requestResult.rows.length === 0) {
       return res.status(404).json({
         message: 'Leave request not found'
       });
     }
 
-    const request = existingRequest.rows[0];
+    const request = requestResult.rows[0];
 
+    // Managers can only reject Employee leave requests
+    if (request.employee_role !== 'Employee') {
+      return res.status(403).json({
+        message: 'Managers can only reject employee leave requests'
+      });
+    }
+
+    // A manager cannot reject their own leave request
     if (request.employee_id === manager_id) {
       return res.status(403).json({
         message: 'You cannot reject your own leave request'
       });
     }
 
+    // The employee must report to this manager
     if (request.manager_id !== manager_id) {
       return res.status(403).json({
-        message: 'You do not have permission to reject this leave request'
+        message: 'You are not authorized to reject this leave request'
       });
     }
 
+    // Only pending requests can be rejected
     if (request.status !== 'Pending') {
       return res.status(400).json({
         message: 'Only pending leave requests can be rejected'
       });
     }
 
+    // Reject the request
     const result = await pool.query(
       `UPDATE leave_requests
        SET
@@ -249,19 +272,20 @@ const rejectLeaveRequest = async (req, res) => {
          updated_at = NOW()
        WHERE leave_request_id = $3
        RETURNING *`,
-      [manager_id, decision_reason.trim(), id]
+      [
+        manager_id,
+        decision_reason.trim(),
+        id
+      ]
     );
-
-
 
     await logAudit({
       user_id: manager_id,
       action: 'REJECT',
       entity: 'leave_request',
-      entity_id: result.rows[0].leave_request_id,
-      description: `Manager rejected a leave request: ${decision_reason.trim()}`
+      entity_id: id,
+      description: 'Manager rejected an employee leave request'
     });
-
 
     res.status(200).json({
       message: 'Leave request rejected successfully',
@@ -277,11 +301,64 @@ const rejectLeaveRequest = async (req, res) => {
   }
 };
 
+const getEmployeeLeaveHistory = async (req, res) => {
+  try {
+    const manager_id = req.user.user_id;
+
+    const result = await pool.query(
+      `SELECT
+        lr.leave_request_id,
+        lr.employee_id,
+        u.name AS employee_name,
+        u.email AS employee_email,
+        d.name AS department,
+        lr.leave_type_id,
+        lt.name AS leave_type,
+        lr.start_date,
+        lr.end_date,
+        lr.reason,
+        lr.status,
+        lr.submitted_at,
+        lr.decided_at,
+        lr.decision_reason,
+        dec.name AS decided_by_name
+       FROM leave_requests lr
+       JOIN users u
+         ON lr.employee_id = u.user_id
+       LEFT JOIN departments d
+         ON u.department_id = d.department_id
+       JOIN leave_types lt
+         ON lr.leave_type_id = lt.leave_type_id
+       LEFT JOIN users dec
+         ON lr.decided_by = dec.user_id
+       WHERE u.manager_id = $1
+       AND u.role = 'Employee'
+       ORDER BY lr.submitted_at DESC`,
+      [manager_id]
+    );
+
+    res.status(200).json({
+      message: 'Employee leave history retrieved successfully',
+      leaveRequests: result.rows
+    });
+
+  } catch (error) {
+    console.error('Get employee leave history error:', error);
+
+    res.status(500).json({
+      message: 'Server error while retrieving employee leave history'
+    });
+  }
+};
+
+
+
 
 
 module.exports = {
   getPendingTeamRequests,
   getTeamLeaveRequestById,
   approveLeaveRequest,
-  rejectLeaveRequest
+  rejectLeaveRequest,
+  getEmployeeLeaveHistory
 };

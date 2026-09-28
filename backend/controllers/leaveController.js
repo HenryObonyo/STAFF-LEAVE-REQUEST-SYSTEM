@@ -106,10 +106,13 @@ const getMyLeaveRequests = async (req, res) => {
         lr.submitted_at,
         lr.decided_at,
         lr.decision_reason,
+        dec.name AS decided_by_name,
         lt.name AS leave_type
        FROM leave_requests lr
        JOIN leave_types lt
          ON lr.leave_type_id = lt.leave_type_id
+       LEFT JOIN users dec
+         ON lr.decided_by = dec.user_id
        WHERE lr.employee_id = $1
        ORDER BY lr.created_at DESC`,
       [employee_id]
@@ -148,6 +151,7 @@ const getMyLeaveRequestById = async (req, res) => {
         lr.submitted_at,
         lr.decided_at,
         lr.decision_reason,
+        dec.name AS decided_by_name
         lt.name AS leave_type
        FROM leave_requests lr
        JOIN leave_types lt
@@ -294,9 +298,71 @@ const updateLeaveRequest = async (req, res) => {
 };
 
 
+
+// Delete a pending leave request
+const deleteLeaveRequest = async (req, res) => {
+  try {
+    const employee_id = req.user.user_id;
+    const { id } = req.params;
+
+    // Check that the request belongs to the logged-in employee
+    const existingRequest = await pool.query(
+      `SELECT *
+       FROM leave_requests
+       WHERE leave_request_id = $1
+       AND employee_id = $2`,
+      [id, employee_id]
+    );
+
+    if (existingRequest.rows.length === 0) {
+      return res.status(404).json({
+        message: 'Leave request not found'
+      });
+    }
+
+    const request = existingRequest.rows[0];
+
+    // Only pending requests can be deleted
+    if (request.status !== 'Pending') {
+      return res.status(400).json({
+        message: 'Only pending leave requests can be deleted'
+      });
+    }
+
+    // Delete the request
+    await pool.query(
+      `DELETE FROM leave_requests
+       WHERE leave_request_id = $1
+       AND employee_id = $2`,
+      [id, employee_id]
+    );
+
+    await logAudit({
+      user_id: employee_id,
+      action: 'DELETE',
+      entity: 'leave_request',
+      entity_id: id,
+      description: 'Employee deleted a pending leave request'
+    });
+
+    res.status(200).json({
+      message: 'Leave request deleted successfully'
+    });
+
+  } catch (error) {
+    console.error('Delete leave request error:', error);
+
+    res.status(500).json({
+      message: 'Server error while deleting leave request'
+    });
+  }
+};
+
+
 module.exports = {
   submitLeaveRequest,
   getMyLeaveRequests,
   getMyLeaveRequestById,
-  updateLeaveRequest
+  updateLeaveRequest,
+  deleteLeaveRequest
 };

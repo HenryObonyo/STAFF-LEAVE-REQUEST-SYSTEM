@@ -4,7 +4,8 @@ const {
   getPendingTeamRequests,
   getTeamLeaveRequestById,
   approveLeaveRequest,
-  rejectLeaveRequest
+  rejectLeaveRequest,
+  getEmployeeLeaveHistory
 } = require('../controllers/managerController');
 
 const {
@@ -42,5 +43,13 @@ router.put(
   authorizeRoles('Manager'),
   rejectLeaveRequest
 );
+
+router.get(
+  '/employee-history',
+  authenticateToken,
+  authorizeRoles('Manager'),
+  getEmployeeLeaveHistory
+);
+
 
 module.exports = router;
