@@ -1,0 +1,132 @@
+
+
+/* =========================================================
+   FINAL FIX — MANAGER LEAVE HISTORY TABLE
+   ========================================================= */
+
+.panel .req-table {
+  width: 100% !important;
+  min-width: 100% !important;
+
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+
+  font-size: 12px;
+}
+
+
+/* Force the six columns to have independent widths */
+
+.panel .req-table th:nth-child(1),
+.panel .req-table td:nth-child(1) {
+  width: 13% !important;
+}
+
+.panel .req-table th:nth-child(2),
+.panel .req-table td:nth-child(2) {
+  width: 16% !important;
+}
+
+.panel .req-table th:nth-child(3),
+.panel .req-table td:nth-child(3) {
+  width: 20% !important;
+}
+
+.panel .req-table th:nth-child(4),
+.panel .req-table td:nth-child(4) {
+  width: 10% !important;
+}
+
+.panel .req-table th:nth-child(5),
+.panel .req-table td:nth-child(5) {
+  width: 24% !important;
+}
+
+.panel .req-table th:nth-child(6),
+.panel .req-table td:nth-child(6) {
+  width: 17% !important;
+}
+
+
+/* Force every cell to contain its own content */
+
+.panel .req-table th,
+.panel .req-table td {
+  box-sizing: border-box !important;
+
+  white-space: normal !important;
+
+  overflow: hidden !important;
+
+  overflow-wrap: anywhere !important;
+
+  word-break: break-word !important;
+
+  vertical-align: top !important;
+}
+
+
+/* Header */
+
+.panel .req-table th {
+  padding: 11px 10px !important;
+
+  line-height: 1.35 !important;
+
+  font-size: 9px !important;
+}
+
+
+/* Body */
+
+.panel .req-table td {
+  padding: 12px 10px !important;
+
+  line-height: 1.5 !important;
+
+  font-size: 11px !important;
+}
+
+
+/* Status should stay compact */
+
+.panel .req-table td:nth-child(4) {
+  white-space: nowrap !important;
+
+  overflow: visible !important;
+
+  vertical-align: middle !important;
+}
+
+
+/* Decision Reason */
+
+.panel .req-table td:nth-child(5) {
+  white-space: normal !important;
+
+  overflow-wrap: anywhere !important;
+
+  word-break: break-word !important;
+}
+
+
+/* Decided By */
+
+.panel .req-table td:nth-child(6) {
+  white-space: normal !important;
+
+  overflow-wrap: anywhere !important;
+
+  word-break: break-word !important;
+}
+
+
+/* Horizontal scrolling when screen is smaller */
+
+.panel:has(.req-table) {
+  width: 100% !important;
+
+  max-width: 100% !important;
+
+  overflow-x: auto !important;
+}

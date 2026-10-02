@@ -10,15 +10,20 @@ const NAV_BY_ROLE = {
   ],
 
   Manager: [
-    { label: "Team Requests", path: "/manager", end: true },
-    { label: "History", path: "/manager/history" },
-    { label: "Team Calendar", path: "/manager/calendar" },
-  ],
+  { label: "Team Requests", path: "/manager", end: true },
+  { label: "My Leave Requests", path: "/manager/leave" },
+  { label: "Employee Leave History", path: "/manager/history" },
+  { label: "Team Calendar", path: "/manager/calendar" },
+],
 
   "HR/Admin": [
     { label: "Overview", path: "/hr", end: true },
     { label: "Employees", path: "/hr/employees" },
+    { label: "Departments", path: "/hr/departments" },
     { label: "Leave Types", path: "/hr/leave-types" },
+    { label: "Manager Leave Approvals", path: "/hr/manager-approvals" },
+    { label: "All Leave Requests", path: "/hr/leave-requests" },
+    { label: "Audit Logs", path: "/hr/audit-logs" },
   ],
 };
 export default function DashboardLayout({ title, children }) {

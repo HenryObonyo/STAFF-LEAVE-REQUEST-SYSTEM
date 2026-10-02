@@ -3,6 +3,8 @@ const express = require('express');
 const {
   getAllEmployees,
   getAllDepartments,
+  createDepartment,
+  deleteDepartment,
   getAllLeaveRequests,
   approveManagerLeaveRequest,
   rejectManagerLeaveRequest,
@@ -10,6 +12,13 @@ const {
   getAuditLogs,
   updateEmployeeStatus
 } = require('../controllers/adminController');
+
+const {
+  getAllLeaveTypes,
+  createLeaveType,
+  deleteLeaveType
+} = require('../controllers/leaveTypeController');
+
 
 
 const {
@@ -89,6 +98,39 @@ router.get(
   getAllDepartments
 );
 
+router.post(
+  '/departments',
+  authenticateToken,
+  authorizeRoles('HR/Admin'),
+  createDepartment
+);
 
+router.delete(
+  '/departments/:department_id',
+  authenticateToken,
+  authorizeRoles('HR/Admin'),
+  deleteDepartment
+);
+
+router.get(
+  '/leave-types',
+  authenticateToken,
+  authorizeRoles('HR/Admin'),
+  getAllLeaveTypes
+);
+
+router.post(
+  '/leave-types',
+  authenticateToken,
+  authorizeRoles('HR/Admin'),
+  createLeaveType
+);
+
+router.delete(
+  '/leave-types/:leave_type_id',
+  authenticateToken,
+  authorizeRoles('HR/Admin'),
+  deleteLeaveType
+);
 
 module.exports = router;

@@ -11,12 +11,18 @@ import LeaveUsagePage from "./pages/LeaveUsagePage";
 import ProfilePage from "./pages/ProfilePage";
 
 import ManagerDashboard from "./pages/ManagerDashboard";
+import ManagerLeavePage from "./pages/ManagerLeavePage";
 import ManagerHistoryPage from "./pages/ManagerHistoryPage";
 import TeamCalendarPage from "./pages/TeamCalendarPage";
 
 import HrAdminDashboard from "./pages/HrAdminDashboard";
 import EmployeesPage from "./pages/EmployeesPage";
 import LeaveTypesPage from "./pages/LeaveTypesPage";
+import DepartmentsPage from "./pages/DepartmentsPage";
+import ManagerLeaveApprovalsPage from "./pages/ManagerLeaveApprovalsPage";
+import AllLeaveRequestsPage from "./pages/AllLeaveRequestsPage";
+import AuditLogsPage from "./pages/AuditLogsPage";
+
 
 function RoleRedirect() {
   const { user } = useAuth();
@@ -84,6 +90,16 @@ export default function App() {
           />
 
           <Route
+            path="/manager/leave"
+            element={
+              <ProtectedRoute allow={["Manager"]}>
+                <ManagerLeavePage />
+              </ProtectedRoute>
+            }
+          />
+
+
+          <Route
             path="/manager/history"
             element={
               <ProtectedRoute allow={["Manager"]}>
@@ -124,6 +140,44 @@ export default function App() {
             element={
               <ProtectedRoute allow={["HR/Admin"]}>
                 <LeaveTypesPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/hr/departments"
+            element={
+              <ProtectedRoute allow={["HR/Admin"]}>
+                <DepartmentsPage />
+              </ProtectedRoute>
+            }
+          />
+
+
+          <Route
+            path="/hr/manager-approvals"
+            element={
+              <ProtectedRoute allow={["HR/Admin"]}>
+                <ManagerLeaveApprovalsPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/hr/leave-requests"
+            element={
+              <ProtectedRoute allow={["HR/Admin"]}>
+                <AllLeaveRequestsPage />
+              </ProtectedRoute>
+            }
+          />
+
+
+          <Route
+            path="/hr/audit-logs"
+            element={
+              <ProtectedRoute allow={["HR/Admin"]}>
+                <AuditLogsPage />
               </ProtectedRoute>
             }
           />

@@ -151,7 +151,7 @@ const getMyLeaveRequestById = async (req, res) => {
         lr.submitted_at,
         lr.decided_at,
         lr.decision_reason,
-        dec.name AS decided_by_name
+        dec.name AS decided_by_name,
         lt.name AS leave_type
        FROM leave_requests lr
        JOIN leave_types lt
@@ -359,10 +359,88 @@ const deleteLeaveRequest = async (req, res) => {
 };
 
 
+// Get logged-in employee's leave balances
+const getMyLeaveBalances = async (req, res) => {
+  try {
+    const employee_id = req.user.user_id;
+
+    const result = await pool.query(
+      `SELECT
+        lb.leave_type_id,
+        lt.name AS leave_type,
+        lb.entitled_days,
+
+        COALESCE(
+          SUM(
+            CASE
+              WHEN lr.status = 'Approved'
+              THEN (lr.end_date - lr.start_date + 1)
+              ELSE 0
+            END
+          ),
+          0
+        ) AS days_used
+
+       FROM leave_balances lb
+
+       JOIN leave_types lt
+         ON lb.leave_type_id = lt.leave_type_id
+
+       LEFT JOIN leave_requests lr
+         ON lr.employee_id = lb.employee_id
+         AND lr.leave_type_id = lb.leave_type_id
+         AND lr.status = 'Approved'
+         AND EXTRACT(YEAR FROM lr.start_date) = lb.leave_year
+
+       WHERE lb.employee_id = $1
+       AND lb.leave_year = EXTRACT(YEAR FROM CURRENT_DATE)
+
+       GROUP BY
+         lb.leave_type_id,
+         lt.name,
+         lb.entitled_days,
+         lb.leave_year
+
+       ORDER BY lb.leave_type_id`,
+      [employee_id]
+    );
+
+    const balances = result.rows.map((row) => {
+      const entitledDays = Number(row.entitled_days);
+      const daysUsed = Number(row.days_used);
+
+      return {
+        leave_type_id: row.leave_type_id,
+        leave_type: row.leave_type,
+        entitled_days: entitledDays,
+        days_used: daysUsed,
+        remaining_days: Math.max(entitledDays - daysUsed, 0)
+      };
+    });
+
+    res.status(200).json({
+      message: 'Leave balances retrieved successfully',
+      balances
+    });
+
+  } catch (error) {
+    console.error('Get leave balances error:', error);
+
+    res.status(500).json({
+      message: 'Server error while retrieving leave balances'
+    });
+  }
+};
+
+
+
+
+
 module.exports = {
   submitLeaveRequest,
   getMyLeaveRequests,
   getMyLeaveRequestById,
   updateLeaveRequest,
-  deleteLeaveRequest
+  deleteLeaveRequest,
+  getMyLeaveBalances
 };

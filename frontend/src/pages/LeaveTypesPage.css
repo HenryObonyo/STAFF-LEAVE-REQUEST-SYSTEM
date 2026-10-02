@@ -1,0 +1,339 @@
+
+/* =========================================================
+   LEAVE TYPES PAGE
+   ========================================================= */
+
+.leave-types-page {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 28px;
+}
+
+/* Page heading */
+.leave-types-page h2 {
+  margin: 0 0 8px;
+  color: #1f1f38;
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+/* =========================================================
+   ADD LEAVE TYPE FORM
+   ========================================================= */
+
+.leave-type-form {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr auto;
+  gap: 14px;
+  align-items: center;
+
+  margin-top: 22px;
+  margin-bottom: 22px;
+  padding: 20px;
+
+  background: #f7f9fc;
+  border: 1px solid #e3e8f0;
+  border-radius: 12px;
+}
+
+/* Inputs */
+.leave-type-form input {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 12px 14px;
+
+  border: 1px solid #cfd6e2;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #1f1f38;
+
+  font-size: 0.95rem;
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.leave-type-form input::placeholder {
+  color: #8a94a6;
+}
+
+.leave-type-form input:focus {
+  border-color: #4db5ff;
+  box-shadow: 0 0 0 3px rgba(77, 181, 255, 0.15);
+  background: #ffffff;
+}
+
+.leave-type-form input:disabled {
+  background: #eef1f5;
+  cursor: not-allowed;
+}
+
+/* Add button */
+.leave-type-form button {
+  min-width: 145px;
+
+  padding: 12px 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #2c2c6c;
+  color: #ffffff;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.leave-type-form button:hover:not(:disabled) {
+  background: #1f1f38;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(31, 31, 56, 0.18);
+}
+
+.leave-type-form button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.leave-type-form button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   INFORMATION / STATUS MESSAGES
+   ========================================================= */
+
+.leave-type-info {
+  margin-top: 8px;
+  margin-bottom: 18px;
+
+  color: #c2043d;
+  font-size: 0.92rem;
+}
+
+/* Success message */
+.leave-types-page .state-msg:not(.error) {
+  color: #4204d4;
+}
+
+/* Error message */
+.leave-types-page .state-msg.error {
+  margin: 12px 0;
+  padding: 11px 14px;
+
+  border: 1px solid #b10404;
+  border-radius: 8px;
+
+  background: #fff4f4;
+  color: #b42318;
+
+  font-size: 0.92rem;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.leave-types-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+
+  margin-top: 8px;
+
+  background: #ffffff;
+
+  border: 1px solid #e1e6ee;
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  box-shadow: 0 4px 16px rgba(31, 31, 56, 0.06);
+}
+
+/* Table header */
+.leave-types-table thead {
+  background: #1f1f38;
+}
+
+.leave-types-table th {
+  padding: 15px 16px;
+
+  color: #ffffff;
+
+  font-size: 0.86rem;
+  font-weight: 600;
+
+  text-align: left;
+  letter-spacing: 0.2px;
+
+  border-bottom: 1px solid #2c2c6c;
+}
+
+/* Table body */
+.leave-types-table td {
+  padding: 15px 16px;
+
+  color: #4a5568;
+
+  font-size: 0.93rem;
+
+  border-bottom: 1px solid #edf0f4;
+
+  vertical-align: middle;
+}
+
+/* ID column */
+.leave-types-table th:first-child,
+.leave-types-table td:first-child {
+  width: 70px;
+  color: #667085;
+  font-weight: 600;
+}
+
+/* Leave type name */
+.leave-types-table td strong {
+  color: #2c2c6c;
+  font-weight: 650;
+}
+
+/* Description */
+.leave-types-table td:nth-child(3) {
+  color: #667085;
+  line-height: 1.5;
+}
+
+/* Row hover */
+.leave-types-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.leave-types-table tbody tr:hover {
+  background: #f7faff;
+}
+
+/* Remove border from final row */
+.leave-types-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* =========================================================
+   DELETE BUTTON
+   ========================================================= */
+
+.delete-leave-type-btn {
+  padding: 8px 14px;
+
+  border: 1px solid #e5484d;
+  border-radius: 7px;
+
+  background: #ffffff;
+  color: #d92d35;
+
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.delete-leave-type-btn:hover:not(:disabled) {
+  background: #d92d35;
+  border-color: #d92d35;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.delete-leave-type-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.delete-leave-type-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.leave-types-page .empty-state {
+  margin-top: 20px;
+  padding: 35px 20px;
+
+  border: 1px dashed #cfd6e2;
+  border-radius: 10px;
+
+  background: #f8fafc;
+
+  color: #667085;
+
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .leave-type-form {
+    grid-template-columns: 1fr;
+  }
+
+  .leave-type-form button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  .leave-types-page {
+    padding: 20px 15px;
+  }
+
+  .leave-types-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .leave-types-table th,
+  .leave-types-table td {
+    padding: 12px 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .leave-types-page {
+    padding: 16px 10px;
+  }
+
+  .leave-types-page h2 {
+    font-size: 1.4rem;
+  }
+
+  .leave-type-form {
+    padding: 15px;
+  }
+
+  .leave-types-table {
+    font-size: 0.85rem;
+  }
+}

@@ -5,7 +5,8 @@ const {
   getMyLeaveRequests,
   getMyLeaveRequestById,
   updateLeaveRequest,
-  deleteLeaveRequest
+  deleteLeaveRequest,
+  getMyLeaveBalances
 } = require('../controllers/leaveController');
 
 const {
@@ -31,6 +32,16 @@ router.get(
   authenticateToken,
   authorizeRoles('Employee', 'Manager'),
   getMyLeaveRequests
+);
+
+
+// Employee/Manager views own leave balances
+
+router.get(
+  '/balances',
+  authenticateToken,
+  authorizeRoles('Employee', 'Manager'),
+  getMyLeaveBalances
 );
 
 

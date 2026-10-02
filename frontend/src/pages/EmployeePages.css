@@ -1,0 +1,500 @@
+/* =========================================================
+   EMPLOYEE MANAGEMENT PAGE
+   ========================================================= */
+
+.employee-management {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  padding: 5px 0 30px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.employee-management *,
+.employee-management *::before,
+.employee-management *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
+.employee-management .panel {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-bottom: 24px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+
+/* Create Employee panel */
+.employee-management .panel:first-child {
+  border-top: 4px solid #2563eb;
+  background: linear-gradient(
+    180deg,
+    #f8fbff 0%,
+    #ffffff 100%
+  );
+}
+
+/* =========================================================
+   HEADINGS
+   ========================================================= */
+
+.employee-management h2 {
+  margin: 0 0 22px;
+  color: #172554;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.employee-management .panel:first-child h2 {
+  color: #1d4ed8;
+}
+
+/* =========================================================
+   CREATE EMPLOYEE FORM
+   Matches the current JSX:
+   
+   <form>
+      <div>
+         <label>
+         <input/select>
+      </div>
+   </form>
+   ========================================================= */
+
+.employee-management .panel:first-child form {
+  width: 100%;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 20px;
+}
+
+/* Each form field */
+.employee-management .panel:first-child form > div {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Labels */
+.employee-management .panel:first-child form label {
+  display: block;
+  margin-bottom: 7px;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Inputs and selects */
+.employee-management .panel:first-child form input,
+.employee-management .panel:first-child form select {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 0 12px;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #1e293b;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+/* Input focus */
+.employee-management .panel:first-child form input:focus,
+.employee-management .panel:first-child form select:focus {
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* Placeholder */
+.employee-management .panel:first-child form input::placeholder {
+  color: #94a3b8;
+}
+
+/* Select */
+.employee-management .panel:first-child form select {
+  cursor: pointer;
+}
+
+/* =========================================================
+   CREATE EMPLOYEE BUTTON
+   ========================================================= */
+
+.employee-management .panel:first-child form button[type="submit"] {
+  grid-column: 1 / -1;
+  justify-self: start;
+
+  min-width: 170px;
+  min-height: 44px;
+  margin-top: 2px;
+  padding: 10px 20px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #2563eb;
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.employee-management .panel:first-child form button[type="submit"]:hover {
+  background: #1d4ed8;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+}
+
+.employee-management .panel:first-child form button[type="submit"]:active {
+  transform: translateY(1px);
+}
+
+.employee-management .panel:first-child form button[type="submit"]:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* =========================================================
+   SUCCESS / ERROR MESSAGES
+   ========================================================= */
+
+.employee-management .state-msg {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+
+  border-radius: 8px;
+
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.employee-management .state-msg.error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.employee-management .state-msg strong {
+  color: #0f172a;
+}
+
+/* =========================================================
+   EMPLOYEE CREATED CREDENTIALS
+   ========================================================= */
+
+.employee-management .panel:first-child > .state-msg:last-child {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #334155;
+}
+
+.employee-management .panel:first-child > .state-msg:last-child strong {
+  color: #1e40af;
+}
+
+/* =========================================================
+   EMPLOYEES TABLE
+   ========================================================= */
+
+.employee-management .panel:last-child {
+  overflow: hidden;
+}
+
+.employee-management .req-table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+/* Table header */
+.employee-management .req-table thead {
+  background: #0333d1;
+}
+
+.employee-management .req-table th {
+  padding: 13px 12px;
+
+  color: #f00303fd;
+  font-size: 13px;
+  font-weight: 600;
+
+  text-align: left;
+  vertical-align: middle;
+
+  word-break: break-word;
+}
+
+/* Table cells */
+.employee-management .req-table td {
+  padding: 13px 12px;
+
+  color: #334155;
+  font-size: 13px;
+
+  border-bottom: 1px solid #e2e8f0;
+
+  vertical-align: middle;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   TABLE COLUMN WIDTHS
+   ========================================================= */
+
+.employee-management .req-table th:nth-child(1),
+.employee-management .req-table td:nth-child(1) {
+  width: 18%;
+}
+
+.employee-management .req-table th:nth-child(2),
+.employee-management .req-table td:nth-child(2) {
+  width: 24%;
+}
+
+.employee-management .req-table th:nth-child(3),
+.employee-management .req-table td:nth-child(3) {
+  width: 14%;
+}
+
+.employee-management .req-table th:nth-child(4),
+.employee-management .req-table td:nth-child(4) {
+  width: 17%;
+}
+
+.employee-management .req-table th:nth-child(5),
+.employee-management .req-table td:nth-child(5) {
+  width: 12%;
+}
+
+.employee-management .req-table th:nth-child(6),
+.employee-management .req-table td:nth-child(6) {
+  width: 15%;
+}
+
+/* =========================================================
+   EMPLOYEE ROW
+   ========================================================= */
+
+.employee-management .req-table tbody .employee-row {
+  background: #09f780;
+  border-left: 4px solid #3b82f6;
+}
+
+.employee-management .req-table tbody .employee-row:hover {
+  background: #eff6ff;
+}
+
+/* =========================================================
+   MANAGER ROW
+   ========================================================= */
+
+.employee-management .req-table tbody .manager-row {
+  background: #faf5ff;
+  border-left: 4px solid #8b5cf6;
+}
+
+.employee-management .req-table tbody .manager-row:hover {
+  background: #f5f3ff;
+}
+
+/* Manager role */
+.employee-management .manager-row td:nth-child(3) {
+  color: #7c3aed;
+  font-weight: 700;
+}
+
+/* Employee role */
+.employee-management .employee-row td:nth-child(3) {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+/* =========================================================
+   TABLE ACTION BUTTON
+   ========================================================= */
+
+.employee-management .req-table td button {
+  min-width: 70px;
+  padding: 7px 10px;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+
+  background: #f06666;
+  color: #0964e4;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.employee-management .req-table td button:hover {
+  border-color: #2563eb;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.employee-management .empty-state {
+  margin: 0;
+  padding: 30px 20px;
+
+  text-align: center;
+
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* =========================================================
+   LOADING STATE
+   ========================================================= */
+
+.employee-management > .state-msg {
+  margin: 10px 0;
+  text-align: center;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .employee-management .panel {
+    padding: 20px;
+  }
+
+  .employee-management .panel:first-child form {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .employee-management .req-table th,
+  .employee-management .req-table td {
+    padding: 10px 8px;
+    font-size: 12px;
+  }
+}
+
+/* =========================================================
+   SMALL TABLET / LARGE PHONE
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .employee-management .panel {
+    padding: 18px;
+    border-radius: 10px;
+  }
+
+  .employee-management h2 {
+    font-size: 19px;
+  }
+
+  /* Form becomes one column */
+  .employee-management .panel:first-child form {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  /* Button fills available width */
+  .employee-management .panel:first-child form button[type="submit"] {
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  /*
+     Table becomes horizontally scrollable INSIDE
+     the table area rather than making the whole
+     browser page wide.
+  */
+  .employee-management .panel:last-child {
+    overflow-x: auto;
+  }
+
+  .employee-management .req-table {
+    min-width: 650px;
+    width: 650px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .employee-management {
+    padding-bottom: 20px;
+  }
+
+  .employee-management .panel {
+    padding: 15px;
+    margin-bottom: 16px;
+  }
+
+  .employee-management h2 {
+    margin-bottom: 17px;
+    font-size: 18px;
+  }
+
+  .employee-management .panel:first-child form input,
+  .employee-management .panel:first-child form select {
+    height: 42px;
+    font-size: 13px;
+  }
+
+  .employee-management .panel:first-child form button[type="submit"] {
+    min-height: 42px;
+    font-size: 13px;
+  }
+
+  .employee-management .state-msg {
+    font-size: 13px;
+  }
+}

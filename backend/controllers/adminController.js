@@ -40,9 +40,10 @@ const getAllDepartments = async (req, res) => {
     const result = await pool.query(
       `SELECT
     department_id,
-    name
+    name,
+    description
    FROM departments
-   ORDER BY name ASC`
+   ORDER BY department_id ASC`
     );
 
     res.status(200).json({
@@ -59,7 +60,127 @@ const getAllDepartments = async (req, res) => {
 };
 
 
+const createDepartment = async (req, res) => {
+  try {
+    const { name, description } = req.body;
 
+    if (!name || !name.trim()) {
+      return res.status(400).json({
+        message: "Department name is required",
+      });
+    }
+
+    const departmentName = name.trim();
+    const departmentDescription = description
+      ? description.trim()
+      : null;
+
+    // Prevent duplicate department names
+    const existingDepartment = await pool.query(
+      `SELECT department_id
+       FROM departments
+       WHERE LOWER(name) = LOWER($1)`,
+      [departmentName]
+    );
+
+    if (existingDepartment.rows.length > 0) {
+      return res.status(409).json({
+        message: "A department with this name already exists",
+      });
+    }
+
+    const result = await pool.query(
+      `INSERT INTO departments (name, description)
+       VALUES ($1, $2)
+       RETURNING department_id, name, description`,
+      [departmentName, departmentDescription]
+    );
+
+    await logAudit({
+      user_id: req.user.user_id,
+      action: "CREATE",
+      entity: "department",
+      entity_id: result.rows[0].department_id,
+      description: `HR/Admin created department: ${departmentName}`,
+    });
+
+    res.status(201).json({
+      message: "Department created successfully",
+      department: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Create department error:", error);
+
+    res.status(500).json({
+      message: "Server error while creating department",
+    });
+  }
+};
+
+
+const deleteDepartment = async (req, res) => {
+  try {
+    const { department_id } = req.params;
+
+    // Check whether the department exists
+    const departmentResult = await pool.query(
+      `SELECT department_id, name
+       FROM departments
+       WHERE department_id = $1`,
+      [department_id]
+    );
+
+    if (departmentResult.rows.length === 0) {
+      return res.status(404).json({
+        message: "Department not found",
+      });
+    }
+
+    const department = departmentResult.rows[0];
+
+    // Prevent deletion if employees are assigned to it
+    const employeeResult = await pool.query(
+      `SELECT COUNT(*) AS count
+       FROM users
+       WHERE department_id = $1`,
+      [department_id]
+    );
+
+    const employeeCount = Number(employeeResult.rows[0].count);
+
+    if (employeeCount > 0) {
+      return res.status(409).json({
+        message:
+          `Cannot delete ${department.name} because ${employeeCount} employee(s) ` +
+          `are currently assigned to this department. Reassign them first.`,
+      });
+    }
+
+    await pool.query(
+      `DELETE FROM departments
+       WHERE department_id = $1`,
+      [department_id]
+    );
+
+    await logAudit({
+      user_id: req.user.user_id,
+      action: "DELETE",
+      entity: "department",
+      entity_id: department_id,
+      description: `HR/Admin deleted department: ${department.name}`,
+    });
+
+    res.status(200).json({
+      message: "Department deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete department error:", error);
+
+    res.status(500).json({
+      message: "Server error while deleting department",
+    });
+  }
+};
 
 
 
@@ -108,6 +229,11 @@ const getAllLeaveRequests = async (req, res) => {
     });
   }
 };
+
+
+
+
+
 
 const approveManagerLeaveRequest = async (req, res) => {
   try {
@@ -489,11 +615,14 @@ const updateEmployeeStatus = async (req, res) => {
 module.exports = {
   getAllEmployees,
   getAllDepartments,
+  createDepartment,
+  deleteDepartment,
   getAllLeaveRequests,
   approveManagerLeaveRequest,
   rejectManagerLeaveRequest,
   getDashboardStats,
   getAuditLogs,
   updateEmployeeStatus
+
 
 };

@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../components/DashboardLayout";
+import "./ManagerDashboard.css";
 import StatusBadge from "../components/StatusBadge";
 import {
   getPendingLeaveRequests,
   approveLeaveRequest,
   rejectLeaveRequest,
-  getMyLeaveRequests,
-  createLeaveRequest,
-  getLeaveTypes,
-  getEmployeeLeaveHistory,
 } from "../api/client";
 
 export default function ManagerDashboard() {
@@ -17,106 +14,29 @@ export default function ManagerDashboard() {
   const [errorMsg, setErrorMsg] = useState("");
   const [actingOnId, setActingOnId] = useState(null);
 
+  async function loadRequests() {
+    setStatus("loading");
+    setErrorMsg("");
 
-  const [myRequests, setMyRequests] = useState([]);
-  const [leaveTypes, setLeaveTypes] = useState([]);
-  const [formStatus, setFormStatus] = useState("");
-  const [formError, setFormError] = useState("");
-  const [employeeHistory, setEmployeeHistory] = useState([]);
-
-  const [formData, setFormData] = useState({
-    leave_type_id: "",
-    start_date: "",
-    end_date: "",
-    reason: "",
-  });
-
- async function loadRequests() {
-  setStatus("loading");
-
-  try {
-    const [pendingData, historyData] = await Promise.all([
-      getPendingLeaveRequests(),
-      getEmployeeLeaveHistory(),
-    ]);
-
-    console.log(
-      "MANAGER PENDING DATA:",
-      JSON.stringify(pendingData, null, 2)
-    );
-
-    console.log(
-      "MANAGER EMPLOYEE HISTORY:",
-      JSON.stringify(historyData, null, 2)
-    );
-
-    setRequests(pendingData);
-    setEmployeeHistory(historyData);
-
-    setStatus("ready");
-  } catch (err) {
-    setErrorMsg(err.message);
-    setStatus("error");
-  }
-}
-
-  async function loadMyLeaveData() {
     try {
-      const [myData, types] = await Promise.all([
-        getMyLeaveRequests(),
-        getLeaveTypes(),
-      ]);
+      const data = await getPendingLeaveRequests();
 
-      setMyRequests(myData.leaveRequests || myData);
-      setLeaveTypes(types.leaveTypes || types);
+      setRequests(data || []);
+      setStatus("ready");
     } catch (err) {
-      setFormError(err.message);
+      setErrorMsg(err.message);
+      setStatus("error");
     }
   }
-
-
 
   useEffect(() => {
     loadRequests();
-    loadMyLeaveData();
   }, []);
-
-
-  async function handleSubmitLeave(e) {
-    e.preventDefault();
-
-    setFormStatus("");
-    setFormError("");
-
-    try {
-      await createLeaveRequest({
-        leave_type_id: Number(formData.leave_type_id),
-        start_date: formData.start_date,
-        end_date: formData.end_date,
-        reason: formData.reason.trim(),
-      });
-
-      setFormStatus("Leave request submitted successfully.");
-
-      setFormData({
-        leave_type_id: "",
-        start_date: "",
-        end_date: "",
-        reason: "",
-      });
-
-      await loadMyLeaveData();
-    } catch (err) {
-      setFormError(err.message);
-    }
-  }
-
-
-
-
 
   async function handleApprove(id) {
     setActingOnId(id);
+    setErrorMsg("");
+
     try {
       await approveLeaveRequest(id);
       await loadRequests();
@@ -133,11 +53,11 @@ export default function ManagerDashboard() {
     );
 
     if (!reason || !reason.trim()) {
-      alert("A rejection reason is required.");
       return;
     }
 
     setActingOnId(id);
+    setErrorMsg("");
 
     try {
       await rejectLeaveRequest(id, reason.trim());
@@ -150,207 +70,105 @@ export default function ManagerDashboard() {
   }
 
   return (
-    <DashboardLayout title="Manager Dashboard">
+    <DashboardLayout title="Team Requests">
       <section className="panel">
-        <h2>Apply Your Leave</h2>
 
-        {formError && (
-          <p className="state-msg error">{formError}</p>
+        <div className="manager-requests-header">
+          <div>
+            <h2 className="manager-requests-title">
+              Pending Approvals
+            </h2>
+
+            <p className="manager-requests-description">
+              Review leave requests submitted by your team.
+            </p>
+          </div>
+
+          <span className="manager-pending-count">
+            {requests.length} Pending
+          </span>
+        </div>
+
+        {status === "loading" && (
+          <p className="state-msg">Loading team requests…</p>
         )}
 
-        {formStatus && (
-          <p className="state-msg">{formStatus}</p>
+        {status === "error" && (
+          <p className="state-msg error">{errorMsg}</p>
         )}
 
-        <form
-          onSubmit={handleSubmitLeave}
-          className="leave-form"
-        >
-          <div className="form-group">
-            <label htmlFor="manager_leave_type">
-              Leave Type
-            </label>
-
-            <select
-              id="manager_leave_type"
-              value={formData.leave_type_id}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  leave_type_id: e.target.value,
-                })
-              }
-              required
-            >
-              <option value="">
-                Select leave type
-              </option>
-
-              {leaveTypes.map((type) => (
-                <option
-                  key={type.leave_type_id}
-                  value={type.leave_type_id}
-                >
-                  {type.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="manager_start_date">
-              Start Date
-            </label>
-
-            <input
-              id="manager_start_date"
-              type="date"
-              value={formData.start_date}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  start_date: e.target.value,
-                })
-              }
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="manager_end_date">
-              End Date
-            </label>
-
-            <input
-              id="manager_end_date"
-              type="date"
-              value={formData.end_date}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  end_date: e.target.value,
-                })
-              }
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="manager_reason">
-              Reason
-            </label>
-
-            <textarea
-              id="manager_reason"
-              value={formData.reason}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  reason: e.target.value,
-                })
-              }
-              placeholder="Enter the reason for your leave request"
-              required
-            />
-          </div>
-
-          <button type="submit">
-            Submit My Leave Request
-          </button>
-        </form>
-      </section>
-
-      <section className="panel">
-        <h2>My Leave Requests</h2>
-
-        {myRequests.length === 0 ? (
-          <p className="empty-state">
-            You have not submitted any leave requests yet.
-          </p>
-        ) : (
-          <table className="req-table">
-            <thead>
-              <tr>
-                <th>Leave Type</th>
-                <th>Dates</th>
-                <th>Reason</th>
-                <th>Status</th>
-                <th>Decision Reason</th>
-                <th>Decided By</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {myRequests.map((r) => (
-                <tr key={r.leave_request_id}>
-                  <td>
-                    {r.leave_type || r.leave_type_id}
-                  </td>
-
-                  <td>
-                    {r.start_date} → {r.end_date}
-                  </td>
-
-                  <td>{r.reason}</td>
-
-                  <td>
-                    <StatusBadge status={r.status} />
-                  </td>
-
-                  <td>
-                    {r.decision_reason || "—"}
-                  </td>
-                  <td>
-                    {r.decided_by_name || "—"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </section>
-
-
-      <section className="panel">
-        <h2>Pending approvals</h2>
-        {status === "loading" && <p className="state-msg">Loading…</p>}
-        {status === "error" && <p className="state-msg error">{errorMsg}</p>}
         {status === "ready" && requests.length === 0 && (
-          <p className="empty-state">Nothing pending right now.</p>
+          <p className="empty-state">
+            There are no pending leave requests from your team.
+          </p>
         )}
+
         {status === "ready" && requests.length > 0 && (
           <table className="req-table">
             <thead>
               <tr>
                 <th>Employee</th>
-                <th>Type</th>
+                <th>Leave Type</th>
                 <th>Dates</th>
                 <th>Reason</th>
                 <th>Status</th>
-                <th></th>
+                <th>Actions</th>
               </tr>
             </thead>
+
             <tbody>
-              {requests.map((r) => (
-                <tr key={r.leave_request_id}>
-                  <td>{r.employee_name}</td>
-                  <td>{r.leave_type || r.leave_type_id}</td>
-                  <td>{r.start_date} → {r.end_date}</td>
-                  <td>{r.reason}</td>
-                  <td><StatusBadge status={r.status} /></td>
+              {requests.map((request) => (
+                <tr key={request.leave_request_id}>
+                  <td>{request.employee_name}</td>
+
+                  <td>
+                    {request.leave_type ||
+                      request.leave_type_id}
+                  </td>
+
+                  <td>
+                    {request.start_date} → {request.end_date}
+                  </td>
+
+                  <td>{request.reason}</td>
+
+                  <td>
+                    <StatusBadge status={request.status} />
+                  </td>
+
                   <td>
                     <div className="row-actions">
                       <button
+                        type="button"
                         className="btn-small approve"
-                        onClick={() => handleApprove(r.leave_request_id)}
-                        disabled={actingOnId === r.leave_request_id}
+                        onClick={() =>
+                          handleApprove(
+                            request.leave_request_id
+                          )
+                        }
+                        disabled={
+                          actingOnId ===
+                          request.leave_request_id
+                        }
                       >
-                        Approve
+                        {actingOnId ===
+                          request.leave_request_id
+                          ? "Processing…"
+                          : "Approve"}
                       </button>
+
                       <button
+                        type="button"
                         className="btn-small reject"
-                        onClick={() => handleReject(r.leave_request_id)}
-                        disabled={actingOnId === r.leave_request_id}
+                        onClick={() =>
+                          handleReject(
+                            request.leave_request_id
+                          )
+                        }
+                        disabled={
+                          actingOnId ===
+                          request.leave_request_id
+                        }
                       >
                         Reject
                       </button>
@@ -362,61 +180,6 @@ export default function ManagerDashboard() {
           </table>
         )}
       </section>
-
-
-      <section className="panel">
-  <h2>Employee Leave History</h2>
-
-  {employeeHistory.length === 0 ? (
-    <p className="empty-state">
-      No employee leave requests found.
-    </p>
-  ) : (
-    <table className="req-table">
-      <thead>
-        <tr>
-          <th>Employee</th>
-          <th>Leave Type</th>
-          <th>Dates</th>
-          <th>Reason</th>
-          <th>Status</th>
-          <th>Decision Reason</th>
-          <th>Decided By</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {employeeHistory.map((r) => (
-          <tr key={r.leave_request_id}>
-            <td>{r.employee_name}</td>
-
-            <td>
-              {r.leave_type || r.leave_type_id}
-            </td>
-
-            <td>
-              {r.start_date} → {r.end_date}
-            </td>
-
-            <td>{r.reason}</td>
-
-            <td>
-              <StatusBadge status={r.status} />
-            </td>
-
-            <td>
-              {r.decision_reason || "—"}
-            </td>
-
-            <td>
-              {r.decided_by_name || "—"}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  )}
-</section>
     </DashboardLayout>
   );
 }

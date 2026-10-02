@@ -1,0 +1,442 @@
+
+/* =========================================================
+   HR / ADMIN OVERVIEW ONLY
+   All styles are scoped to .hr-overview
+   ========================================================= */
+
+.hr-overview {
+  width: 100%;
+}
+
+/* =========================================================
+   MAIN SUMMARY CARDS
+   ========================================================= */
+
+.hr-overview .summary-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.hr-overview .summary-card {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 22px;
+  min-height: 115px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hr-overview .summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.hr-overview .summary-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+}
+
+/* =========================================================
+   COMPANY SUMMARY COLORS
+   ========================================================= */
+
+/* Employees - Blue */
+.hr-overview > .summary-cards .summary-card:nth-child(1) {
+  background: linear-gradient(135deg, #eef4ff, #ffffff);
+}
+
+.hr-overview > .summary-cards .summary-card:nth-child(1)::before {
+  background: #2563eb;
+}
+
+.hr-overview > .summary-cards .summary-card:nth-child(1)
+  .summary-card__value {
+  color: #2563eb;
+}
+
+/* Pending - Orange */
+.hr-overview > .summary-cards .summary-card:nth-child(2) {
+  background: linear-gradient(135deg, #fff8e8, #ffffff);
+}
+
+.hr-overview > .summary-cards .summary-card:nth-child(2)::before {
+  background: #f59e0b;
+}
+
+.hr-overview > .summary-cards .summary-card:nth-child(2)
+  .summary-card__value {
+  color: #d97706;
+}
+
+/* Approved - Green */
+.hr-overview > .summary-cards .summary-card:nth-child(3) {
+  background: linear-gradient(135deg, #ecfdf5, #ffffff);
+}
+
+.hr-overview > .summary-cards .summary-card:nth-child(3)::before {
+  background: #10b981;
+}
+
+.hr-overview > .summary-cards .summary-card:nth-child(3)
+  .summary-card__value {
+  color: #059669;
+}
+
+/* Rejected - Red */
+.hr-overview > .summary-cards .summary-card:nth-child(4) {
+  background: linear-gradient(135deg, #fff1f2, #ffffff);
+}
+
+.hr-overview > .summary-cards .summary-card:nth-child(4)::before {
+  background: #ef4444;
+}
+
+.hr-overview > .summary-cards .summary-card:nth-child(4)
+  .summary-card__value {
+  color: #dc2626;
+}
+
+/* =========================================================
+   CARD TEXT
+   ========================================================= */
+
+.hr-overview .summary-card__label {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.hr-overview .summary-card__value {
+  font-size: 32px;
+  font-weight: 800;
+}
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
+.hr-overview .panel {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+}
+
+.hr-overview .panel h2 {
+  margin: 0 0 20px;
+  color: #1f1f38;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   LEAVE ANALYTICS
+   ========================================================= */
+
+.hr-overview .panel .summary-cards .summary-card:nth-child(1) {
+  background: linear-gradient(135deg, #f5f3ff, #ffffff);
+  border-top: 4px solid #7c3aed;
+}
+
+.hr-overview .panel .summary-cards .summary-card:nth-child(1)
+  .summary-card__value {
+  color: #7c3aed;
+}
+
+.hr-overview .panel .summary-cards .summary-card:nth-child(2) {
+  background: linear-gradient(135deg, #eff6ff, #ffffff);
+  border-top: 4px solid #0284c7;
+}
+
+.hr-overview .panel .summary-cards .summary-card:nth-child(2)
+  .summary-card__value {
+  color: #0284c7;
+}
+
+.hr-overview .panel .summary-cards .summary-card:nth-child(3) {
+  background: linear-gradient(135deg, #ecfdf5, #ffffff);
+  border-top: 4px solid #16a34a;
+}
+
+.hr-overview .panel .summary-cards .summary-card:nth-child(3)
+  .summary-card__value {
+  color: #16a34a;
+}
+
+.hr-overview .panel .summary-cards .summary-card:nth-child(4) {
+  background: linear-gradient(135deg, #fff7ed, #ffffff);
+  border-top: 4px solid #ea580c;
+}
+
+.hr-overview .panel .summary-cards .summary-card:nth-child(4)
+  .summary-card__value {
+  color: #ea580c;
+}
+
+/* =========================================================
+   LEAVE BY MONTH
+   ========================================================= */
+
+.hr-overview .panel.leave-month-panel {
+  border-top: 5px solid #2563eb;
+  background: linear-gradient(
+    135deg,
+    #eff6ff 0%,
+    #f8fbff 45%,
+    #ffffff 100%
+  );
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.1);
+}
+
+.hr-overview .panel.leave-month-panel h2 {
+  color: #1d4ed8;
+  font-size: 21px;
+}
+
+.hr-overview .panel.leave-month-panel .state-msg {
+  background: #dbeafe;
+  border-left: 4px solid #2563eb;
+  padding: 13px 16px;
+  border-radius: 8px;
+  color: #1e3a8a;
+  margin-bottom: 20px;
+}
+
+.hr-overview .panel.leave-month-panel > div:last-child {
+  background: #ffffff;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  padding: 15px 10px 10px;
+  box-shadow: inset 0 0 20px rgba(37, 99, 235, 0.04);
+}
+
+/* =========================================================
+   LEAVE BY TYPE
+   ========================================================= */
+
+.hr-overview .panel.leave-type-panel {
+  border-top: 4px solid #8b5cf6;
+}
+
+.hr-overview .panel.leave-type-panel h2 {
+  color: #6d28d9;
+}
+
+/* =========================================================
+   LEAVE BY DEPARTMENT
+   ========================================================= */
+
+.hr-overview .panel.leave-department-panel {
+  border-top: 4px solid #0891b2;
+}
+
+.hr-overview .panel.leave-department-panel h2 {
+  color: #0e7490;
+}
+
+.hr-overview .panel.leave-department-panel .state-msg {
+  background: #ecfeff;
+  border-left: 4px solid #0891b2;
+  padding: 13px 16px;
+  border-radius: 7px;
+  color: #155e75;
+}
+
+/* =========================================================
+   WORKFORCE PLANNING INSIGHT
+   ========================================================= */
+
+.hr-overview .panel.workforce-insight-panel {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    #f0fdf4 0%,
+    #ecfdf5 50%,
+    #ffffff 100%
+  );
+  border: 1px solid #bbf7d0;
+  border-left: 5px solid #16a34a;
+}
+
+.hr-overview .panel.workforce-insight-panel h2 {
+  color: #15803d;
+}
+
+.hr-overview .panel.workforce-insight-panel .state-msg {
+  margin: 0;
+  padding: 18px 20px;
+  background: #ffffff;
+  border: 1px solid #dcfce7;
+  border-radius: 9px;
+  color: #e70909;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.hr-overview .panel.workforce-insight-panel::after {
+  content: "INSIGHT";
+  position: absolute;
+  right: 24px;
+  top: 22px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #16a34a;
+  background: #dcfce7;
+  padding: 6px 10px;
+  border-radius: 20px;
+}
+
+/* =========================================================
+   TABLES
+   ========================================================= */
+
+.hr-overview .req-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.hr-overview .req-table th,
+.hr-overview .req-table td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.hr-overview .req-table th {
+  background: #f8fafc;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.hr-overview .req-table td {
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.hr-overview .req-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.hr-overview .req-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* =========================================================
+   STATE MESSAGES
+   ========================================================= */
+
+.hr-overview .state-msg {
+  margin: 0 0 16px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.hr-overview .state-msg strong {
+  color: #1f1f38;
+}
+
+.hr-overview .state-msg.error {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  padding: 14px 16px;
+  border-radius: 8px;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.hr-overview .empty-state {
+  margin: 0;
+  padding: 25px;
+  text-align: center;
+  color: #6b7280;
+  background: #f8fafc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .hr-overview .summary-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .hr-overview .summary-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .hr-overview .panel {
+    padding: 18px;
+  }
+
+  .hr-overview .panel h2 {
+    font-size: 18px;
+  }
+
+  .hr-overview .req-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .hr-overview .summary-card {
+    min-height: 95px;
+  }
+
+  .hr-overview .summary-card__value {
+    font-size: 27px;
+  }
+
+  .hr-overview .workforce-insight-panel::after {
+    position: static;
+    display: inline-block;
+    margin-top: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hr-overview .panel {
+    padding: 15px;
+    border-radius: 9px;
+  }
+
+  .hr-overview .summary-card {
+    padding: 17px;
+  }
+
+  .hr-overview .summary-card__value {
+    font-size: 25px;
+  }
+
+  .hr-overview .req-table th,
+  .hr-overview .req-table td {
+    padding: 10px 12px;
+  }
+}

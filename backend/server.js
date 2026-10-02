@@ -11,6 +11,7 @@ const authRoutes = require('./routes/authRoutes');
 const leaveRoutes = require('./routes/leaveRoutes');
 const managerRoutes = require('./routes/managerRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use('/api/leave-requests', leaveRoutes);
 app.use('/api/manager', managerRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/leave-types', leaveTypeRoutes);
+app.use('/api/profile', profileRoutes);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, async () => {

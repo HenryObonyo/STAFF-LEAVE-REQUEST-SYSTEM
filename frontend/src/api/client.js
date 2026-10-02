@@ -65,6 +65,12 @@ export async function getMyLeaveRequests() {
   return data;
 }
 
+export async function getMyLeaveBalances() {
+  const data = await request("/leave-requests/balances");
+  return data;
+}
+
+
 export function updateLeaveRequest(id, payload) {
   return request(`/leave-requests/${id}`, {
     method: "PUT",
@@ -78,6 +84,30 @@ export function deleteLeaveRequest(id) {
   });
 }
 
+export async function getMyProfile() {
+  const data = await request("/profile/me");
+  return data;
+}
+
+export async function updateMyProfile(profileData) {
+  const data = await request("/profile/me", {
+    method: "PUT",
+    body: profileData,
+  });
+
+  return data;
+}
+
+export async function changeMyPassword(passwordData) {
+  const data = await request("/profile/password", {
+    method: "PUT",
+    body: passwordData,
+  });
+
+  return data;
+}
+
+
 
 // --- Manager ---
 
@@ -90,6 +120,9 @@ export async function getTeamLeaveRequests() {
   const data = await request("/manager/employee-history");
   return data.leaveRequests;
 }
+
+
+
 
 export function approveLeaveRequest(id) {
   return request(`/manager/requests/${id}/approve`, {
@@ -123,6 +156,32 @@ export async function getAllDepartments() {
   const data = await request("/admin/departments");
   return data.departments;
 }
+
+
+export async function createDepartment(name, description) {
+  const data = await request("/admin/departments", {
+    method: "POST",
+    body: {
+      name,
+      description,
+    },
+  });
+
+  return data.department;
+}
+
+export async function deleteDepartment(departmentId) {
+  const data = await request(
+    `/admin/departments/${departmentId}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  return data;
+}
+
+
 
 export async function createEmployee(employeeData) {
   const data = await request("/admin/employees", {
@@ -194,4 +253,33 @@ export function getLeaveTypes() {
   return request("/leave-types", {
     auth: false,
   });
+}
+
+
+export async function getAllLeaveTypes() {
+  const data = await request("/admin/leave-types");
+  return data.leaveTypes;
+}
+
+export async function createLeaveType(name, description) {
+  const data = await request("/admin/leave-types", {
+    method: "POST",
+    body: {
+      name,
+      description,
+    },
+  });
+
+  return data.leaveType;
+}
+
+export async function deleteLeaveType(leaveTypeId) {
+  const data = await request(
+    `/admin/leave-types/${leaveTypeId}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  return data;
 }

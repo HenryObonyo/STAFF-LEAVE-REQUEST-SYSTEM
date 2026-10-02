@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../components/DashboardLayout";
-import { getMyLeaveRequests, getLeaveTypes } from "../api/client";
+import {
+  getMyLeaveBalances
+} from "../api/client";
+import "./LeaveUsagePage.css";
 
-// Counts days used per leave type from the employee's own approved requests.
-// Note: this shows USAGE, not a remaining balance — the system has no
-// concept of an annual allowance/entitlement yet, so we only show what's
-// verifiably true from the data that exists rather than inventing numbers.
+// Calculate the number of calendar days between two dates.
 function daysBetween(start, end) {
-  const ms = new Date(end) - new Date(start);
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  const ms = endDate - startDate;
+
   return Math.round(ms / (1000 * 60 * 60 * 24)) + 1;
 }
 
@@ -19,66 +23,102 @@ export default function LeaveUsagePage() {
   useEffect(() => {
     async function load() {
       setStatus("loading");
+      setErrorMsg("");
+
       try {
-        const [requests, types] = await Promise.all([
-          getMyLeaveRequests(),
-          getLeaveTypes(),
-        ]);
+        const data = await getMyLeaveBalances();
 
-        const approved = requests.filter((r) => r.status === "approved");
+        const balances = Array.isArray(data)
+          ? data
+          : Array.isArray(data.balances)
+            ? data.balances
+            : [];
 
-        const rows = types.map((type) => {
-          const forType = approved.filter((r) => r.leave_type_id === type.id);
-          const daysUsed = forType.reduce(
-            (sum, r) => sum + daysBetween(r.start_date, r.end_date),
-            0
-          );
-          return { ...type, daysUsed, timesTaken: forType.length };
-        });
-
-        setUsageByType(rows);
+        setUsageByType(balances);
         setStatus("ready");
       } catch (err) {
         setErrorMsg(err.message);
         setStatus("error");
       }
     }
+
     load();
   }, []);
 
+
   return (
-    <DashboardLayout title="Leave usage this year">
-      <section className="panel">
-        <h2>Days used, by type</h2>
-        <p className="state-msg" style={{ marginBottom: 16 }}>
-          Based on your approved requests. This shows what you've used, not a
-          fixed annual balance — talk to HR about your specific entitlement.
-        </p>
+    <div className="leave-usage-page">
+      <DashboardLayout title="Leave Usage">
+        <section className="leave-usage-panel">
+          <div className="leave-usage-header">
+            <h2>Leave Usage</h2>
 
-        {status === "loading" && <p className="state-msg">Loading…</p>}
-        {status === "error" && <p className="state-msg error">{errorMsg}</p>}
+            <p>
+              <p>
+                View your leave entitlement, days used, and remaining
+                leave balance for the current year.
+              </p>
+            </p>
+          </div>
 
-        {status === "ready" && (
-          <table className="req-table">
-            <thead>
-              <tr>
-                <th>Leave type</th>
-                <th>Times taken</th>
-                <th>Days used</th>
-              </tr>
-            </thead>
-            <tbody>
-              {usageByType.map((row) => (
-                <tr key={row.id}>
-                  <td>{row.name}</td>
-                  <td>{row.timesTaken}</td>
-                  <td>{row.daysUsed}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </section>
-    </DashboardLayout>
+          <div className="leave-usage-notice">
+            <strong>About your leave usage</strong>
+
+            <p>
+              <p>
+                Your leave balance is calculated from your approved
+                leave requests and your current annual entitlement.
+              </p>
+            </p>
+          </div>
+
+          {status === "loading" && (
+            <p className="leave-usage-loading">
+              Loading your leave usage...
+            </p>
+          )}
+
+          {status === "error" && (
+            <p className="leave-usage-error">
+              {errorMsg}
+            </p>
+          )}
+
+          {status === "ready" &&
+            usageByType.length === 0 && (
+              <p className="leave-usage-empty">
+                No leave types are currently available.
+              </p>
+            )}
+
+          {status === "ready" &&
+            usageByType.length > 0 && (
+              <div className="leave-usage-table-wrapper">
+                <table className="leave-usage-table">
+                  <thead>
+                    <tr>
+                      <th>Leave Type</th>
+                      <th>Entitled Days</th>
+                      <th>Days Used</th>
+                      <th>Remaining Days</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {usageByType.map((row) => (
+                      <tr key={row.leave_type_id}>
+                        <td>{row.leave_type}</td>
+                        <td>{row.entitled_days}</td>
+                        <td>{row.days_used}</td>
+                        <td>{row.remaining_days}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+        </section>
+      </DashboardLayout>
+    </div>
   );
 }

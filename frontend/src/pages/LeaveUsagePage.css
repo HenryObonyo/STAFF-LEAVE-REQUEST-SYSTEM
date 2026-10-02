@@ -1,0 +1,174 @@
+.leave-usage-page {
+  width: 100%;
+  min-width: 0;
+}
+
+.leave-usage-panel {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid #e6e6ef;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.leave-usage-header {
+  margin-bottom: 20px;
+}
+
+.leave-usage-header h2 {
+  margin: 0 0 6px;
+  color: #1f1f38;
+  font-size: 20px;
+}
+
+.leave-usage-header p {
+  margin: 0;
+  color: #6b6b7c;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Information notice */
+.leave-usage-notice {
+  margin-bottom: 22px;
+  padding: 14px 16px;
+  border-left: 4px solid #4db5ff;
+  border-radius: 8px;
+  background: #f4f9fd;
+}
+
+.leave-usage-notice strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #1f1f38;
+  font-size: 14px;
+}
+
+.leave-usage-notice p {
+  margin: 0;
+  color: #5f6070;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Table */
+.leave-usage-table-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.leave-usage-table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.leave-usage-table th,
+.leave-usage-table td {
+  padding: 13px 14px;
+  border-bottom: 1px solid #eeeeF4;
+  text-align: left;
+  font-size: 14px;
+}
+
+.leave-usage-table th {
+  background: #f7f7fb;
+  color: #1f1f38;
+  font-weight: 700;
+}
+
+.leave-usage-table td {
+  color: #44445a;
+}
+
+.leave-usage-table th:nth-child(1),
+.leave-usage-table td:nth-child(1) {
+  width: 55%;
+}
+
+.leave-usage-table th:nth-child(2),
+.leave-usage-table td:nth-child(2) {
+  width: 22.5%;
+}
+
+.leave-usage-table th:nth-child(3),
+.leave-usage-table td:nth-child(3) {
+  width: 22.5%;
+}
+
+.leave-usage-table tbody tr:hover {
+  background: #fafaff;
+}
+
+/* State messages */
+.leave-usage-loading,
+.leave-usage-empty {
+  margin: 0;
+  padding: 18px 0;
+  color: #6b6b7c;
+  font-size: 14px;
+}
+
+.leave-usage-error {
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #fdecec;
+  border: 1px solid #f2bcbc;
+  color: #a52828;
+  font-size: 14px;
+}
+
+/* Compact leave balances table */
+.leave-usage-table-wrapper {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.leave-usage-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.leave-usage-table th,
+.leave-usage-table td {
+  padding: 10px 12px;
+  font-size: 14px;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.leave-usage-table th:first-child,
+.leave-usage-table td:first-child {
+  width: 40%;
+  text-align: left;
+}
+
+.leave-usage-table th:nth-child(2),
+.leave-usage-table td:nth-child(2),
+.leave-usage-table th:nth-child(3),
+.leave-usage-table td:nth-child(3),
+.leave-usage-table th:nth-child(4),
+.leave-usage-table td:nth-child(4) {
+  width: 20%;
+  text-align: center;
+}
+
+
+/* Responsive */
+@media (max-width: 600px) {
+  .leave-usage-panel {
+    padding: 18px;
+  }
+
+  .leave-usage-table {
+    min-width: 500px;
+  }
+}

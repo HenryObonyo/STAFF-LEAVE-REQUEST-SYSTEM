@@ -1,0 +1,515 @@
+
+/* =========================================================
+   DEPARTMENTS PAGE
+   Professional HR / Admin Dashboard Styling
+   ========================================================= */
+
+.departments-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px;
+  box-sizing: border-box;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================================================
+   PAGE TITLE
+   ========================================================= */
+
+.departments-page h2 {
+  margin: 0 0 24px;
+
+  color: #111827;
+
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   ADD DEPARTMENT SECTION
+   ========================================================= */
+
+.department-form {
+  display: grid;
+
+  grid-template-columns:
+    minmax(200px, 0.8fr)
+    minmax(260px, 1.4fr)
+    auto;
+
+  gap: 12px;
+
+  align-items: center;
+
+  margin-bottom: 24px;
+  padding: 20px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+
+/* =========================================================
+   FORM INPUTS
+   ========================================================= */
+
+.department-form input {
+  width: 100%;
+  min-height: 42px;
+
+  padding: 10px 13px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+
+  background: #ffffff;
+  color: #1f2937;
+
+  font-family: inherit;
+  font-size: 13px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.department-form input::placeholder {
+  color: #9ca3af;
+}
+
+.department-form input:hover {
+  border-color: #b9c0ca;
+}
+
+.department-form input:focus {
+  border-color: #4b5563;
+
+  box-shadow:
+    0 0 0 3px rgba(75, 85, 99, 0.10);
+}
+
+.department-form input:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   ADD DEPARTMENT BUTTON
+   ========================================================= */
+
+.department-add-button {
+  min-height: 42px;
+
+  padding: 10px 18px;
+
+  border: 1px solid #1f2937;
+  border-radius: 7px;
+
+  background: #1f2937;
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.department-add-button:hover:not(:disabled) {
+  background: #111827;
+  border-color: #111827;
+
+  box-shadow:
+    0 4px 9px rgba(15, 23, 42, 0.15);
+}
+
+.department-add-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.department-add-button:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 3px rgba(31, 41, 55, 0.14);
+}
+
+.department-add-button:disabled {
+  background: #9ca3af;
+  border-color: #9ca3af;
+
+  cursor: not-allowed;
+
+  box-shadow: none;
+}
+
+
+/* =========================================================
+   STATUS MESSAGES
+   ========================================================= */
+
+.state-msg {
+  margin: 0 0 18px;
+  padding: 13px 16px;
+
+  border: 1px solid #dbe3ea;
+  border-radius: 8px;
+
+  background: #f8fafc;
+  color: #475569;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   ERROR MESSAGE
+   ========================================================= */
+
+.state-msg.error {
+  border-color: #fecaca;
+
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-state {
+  margin: 0;
+
+  padding: 42px 20px;
+
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+
+  background: #05417e;
+  color: #64748b;
+
+  font-size: 14px;
+  line-height: 1.6;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   TABLE CONTAINER
+   ========================================================= */
+
+.departments-table-container {
+  width: 100%;
+
+  overflow-x: auto;
+
+  border-radius: 10px;
+}
+
+
+/* =========================================================
+   DEPARTMENT TABLE
+   ========================================================= */
+
+.departments-page .req-table {
+  width: 100%;
+  min-width: 100px;
+
+  border-collapse: separate;
+  border-spacing: 0;
+
+  table-layout: fixed;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   TABLE HEADER
+   ========================================================= */
+
+.departments-page .req-table thead th {
+  padding: 14px 15px;
+
+  background: #eff3f7;
+
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+
+  color: #475569;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-align: left;
+
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  white-space: nowrap;
+}
+
+.departments-page .req-table thead th:first-child {
+  width: 16%;
+
+  border-left: 1px solid #e5e7eb;
+  border-top-left-radius: 9px;
+}
+
+.departments-page .req-table thead th:nth-child(2) {
+  width: 23%;
+}
+
+.departments-page .req-table thead th:nth-child(3) {
+  width: 43%;
+}
+
+.departments-page .req-table thead th:last-child {
+  width: 18%;
+
+  border-right: 1px solid #e5e7eb;
+  border-top-right-radius: 9px;
+}
+
+
+/* =========================================================
+   TABLE BODY
+   ========================================================= */
+
+.departments-page .req-table tbody td {
+  padding: 16px 15px;
+
+  background: #ffdcfa;
+
+  border-bottom: 1px solid #edf0f3;
+
+  color: #374151;
+
+  font-size: 13px;
+  line-height: 1.55;
+
+  vertical-align: middle;
+
+  overflow-wrap: anywhere;
+}
+
+.departments-page .req-table tbody td:first-child {
+  border-left: 1px solid #e5e7eb;
+
+  color: #64748b;
+
+  font-weight: 600;
+}
+
+.departments-page .req-table tbody td:nth-child(2) {
+  color: #1f2937;
+
+  font-weight: 600;
+}
+
+.departments-page .req-table tbody td:nth-child(3) {
+  color: #4b5563;
+
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.departments-page .req-table tbody td:last-child {
+  border-right: 1px solid #e5e7eb;
+}
+
+
+/* =========================================================
+   TABLE ROW HOVER
+   ========================================================= */
+
+.departments-page .req-table tbody tr {
+  transition: background 0.15s ease;
+}
+
+.departments-page .req-table tbody tr:hover td {
+  background: #f9fafb;
+}
+
+
+/* =========================================================
+   DELETE BUTTON
+   ========================================================= */
+
+.department-delete-button {
+  min-width: 76px;
+  min-height: 36px;
+
+  padding: 8px 13px;
+
+  border: 1px solid #dc2626;
+  border-radius: 7px;
+
+  background: #eeeeee;
+  color: #dc2626;
+
+  font-family: inherit;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.department-delete-button:hover:not(:disabled) {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #e61313;
+
+  box-shadow:
+    0 3px 8px rgba(220, 38, 38, 0.15);
+}
+
+.department-delete-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.department-delete-button:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 3px rgba(220, 38, 38, 0.12);
+}
+
+.department-delete-button:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+
+  box-shadow: none;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .departments-page {
+    padding: 22px;
+  }
+
+  .department-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .department-add-button {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .departments-page {
+    padding: 17px;
+
+    border-radius: 11px;
+  }
+
+  .departments-page h2 {
+    margin-bottom: 18px;
+
+    font-size: 19px;
+  }
+
+  .department-form {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+
+    padding: 16px;
+  }
+
+  .department-form input {
+    min-height: 40px;
+  }
+
+  .department-add-button {
+    min-height: 40px;
+  }
+
+  .departments-page .req-table {
+    min-width: 700px;
+  }
+
+  .departments-page .req-table thead th,
+  .departments-page .req-table tbody td {
+    padding-left: 11px;
+    padding-right: 11px;
+  }
+
+  .departments-page .req-table thead th {
+    font-size: 10px;
+  }
+
+  .departments-page .req-table tbody td {
+    font-size: 12px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 400px) {
+  .departments-page {
+    padding: 14px;
+  }
+
+  .department-form {
+    padding: 14px;
+  }
+
+  .empty-state {
+    padding: 32px 15px;
+  }
+}
+

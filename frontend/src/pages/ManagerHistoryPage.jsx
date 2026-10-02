@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../components/DashboardLayout";
 import StatusBadge from "../components/StatusBadge";
 import { getTeamLeaveRequests } from "../api/client";
-
+import "./ManagerHistoryPage.css";
 export default function ManagerHistoryPage() {
   const [requests, setRequests] = useState([]);
   const [status, setStatus] = useState("loading");

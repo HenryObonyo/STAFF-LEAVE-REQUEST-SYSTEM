@@ -1,0 +1,299 @@
+/* =========================================================
+   MANAGER - TEAM REQUESTS
+   ========================================================= */
+
+.manager-requests-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(77, 181, 255, 0.14);
+}
+
+.manager-requests-title {
+  margin: 0 0 6px;
+  color: #1f1f38;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.manager-requests-description {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.manager-pending-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 92px;
+  padding: 8px 13px;
+  border: 1px solid rgba(77, 181, 255, 0.3);
+  border-radius: 999px;
+  background: rgba(77, 181, 255, 0.1);
+  color: #2c2c6c;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+
+/* ---------------------------------------------------------
+   TEAM REQUEST TABLE - FIT TO PAGE
+   --------------------------------------------------------- */
+
+.req-table {
+  width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid rgba(44, 44, 108, 0.12);
+  border-radius: 12px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.req-table thead th {
+  padding: 13px 10px;
+  border-bottom: 1px solid rgba(44, 44, 108, 0.12);
+  background: #f5f7fc;
+  color: #2c2c6c;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.req-table tbody td {
+  padding: 13px 10px;
+  border-bottom: 1px solid rgba(44, 44, 108, 0.08);
+  color: #33344f;
+  font-size: 13px;
+  line-height: 1.4;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+.req-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.req-table tbody tr {
+  transition: background 0.18s ease;
+}
+
+.req-table tbody tr:hover {
+  background: #f8faff;
+}
+
+
+/* ---------------------------------------------------------
+   COLUMN WIDTHS
+   --------------------------------------------------------- */
+
+.req-table th:nth-child(1),
+.req-table td:nth-child(1) {
+  width: 16%;
+}
+
+.req-table th:nth-child(2),
+.req-table td:nth-child(2) {
+  width: 14%;
+}
+
+.req-table th:nth-child(3),
+.req-table td:nth-child(3) {
+  width: 19%;
+}
+
+.req-table th:nth-child(4),
+.req-table td:nth-child(4) {
+  width: 20%;
+}
+
+.req-table th:nth-child(5),
+.req-table td:nth-child(5) {
+  width: 11%;
+}
+
+.req-table th:nth-child(6),
+.req-table td:nth-child(6) {
+  width: 20%;
+}
+
+
+/* ---------------------------------------------------------
+   EMPLOYEE NAME
+   --------------------------------------------------------- */
+
+.req-table tbody td:first-child {
+  color: #1f1f38;
+  font-weight: 700;
+}
+
+
+/* ---------------------------------------------------------
+   REASON
+   --------------------------------------------------------- */
+
+.req-table tbody td:nth-child(4) {
+  color: #55566f;
+  white-space: normal;
+}
+
+
+/* ---------------------------------------------------------
+   ACTION BUTTONS
+   --------------------------------------------------------- */
+
+.row-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.btn-small {
+  min-width: 65px;
+  padding: 7px 9px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn-small:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.btn-small:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-small:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+
+/* Approve */
+
+.btn-small.approve {
+  background: #eaf8f0;
+  border-color: #b8e6ca;
+  color: #176b3a;
+}
+
+.btn-small.approve:hover:not(:disabled) {
+  background: #d9f3e3;
+  border-color: #8ed5a9;
+}
+
+
+/* Reject */
+
+.btn-small.reject {
+  background: #fff0f0;
+  border-color: #f1c2c2;
+  color: #a83232;
+}
+
+.btn-small.reject:hover:not(:disabled) {
+  background: #ffe2e2;
+  border-color: #e7a1a1;
+}
+
+
+/* ---------------------------------------------------------
+   LOADING / ERROR / EMPTY STATES
+   --------------------------------------------------------- */
+
+.state-msg {
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.state-msg.error {
+  padding: 12px 14px;
+  border: 1px solid #f0c1c1;
+  border-radius: 8px;
+  background: #fff4f4;
+  color: #a83232;
+}
+
+.empty-state {
+  margin: 0;
+  padding: 42px 24px;
+  border: 1px dashed rgba(44, 44, 108, 0.2);
+  border-radius: 10px;
+  background: #fafbfe;
+  color: #6b7280;
+  font-size: 14px;
+  text-align: center;
+}
+
+
+/* ---------------------------------------------------------
+   SMALLER SCREENS
+   --------------------------------------------------------- */
+
+@media (max-width: 850px) {
+  .req-table {
+    font-size: 12px;
+  }
+
+  .req-table thead th,
+  .req-table tbody td {
+    padding: 9px 7px;
+  }
+
+  .btn-small {
+    min-width: 58px;
+    padding: 6px 7px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 650px) {
+  .manager-requests-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .manager-pending-count {
+    align-self: flex-start;
+  }
+
+  .req-table {
+    font-size: 11px;
+  }
+
+  .req-table thead th,
+  .req-table tbody td {
+    padding: 8px 5px;
+  }
+
+  .row-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-small {
+    width: 100%;
+  }
+}
